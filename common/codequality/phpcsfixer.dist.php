@@ -4,11 +4,6 @@ include 'php-cs-fixer-rules/PhpdocOrderThrowsAtTheEndFixer.php';
 
 use PhpCsFixer\Fixer\Phpdoc\PhpdocOrderThrowsAtTheEndFixer;
 
-$finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__)
-    ->notPath('Infrastructure/Kernel.php')
-;
-
 return (new PhpCsFixer\Config())
     ->setCacheFile('var/cache/dev/.phpcsfixer.cache')
     ->registerCustomFixers([new PhpdocOrderThrowsAtTheEndFixer()])
@@ -33,5 +28,4 @@ return (new PhpCsFixer\Config())
             'square_brace_block',
             'throw',
         ]],
-    ])
-    ->setFinder($finder);
+    ]);
