@@ -12,6 +12,6 @@ final class WebhookController
     #[Route(path: '/api/webhook', methods: ['POST', 'GET'])]
     public function __invoke(): Response
     {
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        return new Response('ok', Response::HTTP_OK);
     }
 }
