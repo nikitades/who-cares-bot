@@ -18,7 +18,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/Kernel.php',
             __DIR__ . '/../src/Tests/',
         ]);
-
-    $services->load('Nikitades\WhoCaresBot\Consumer\Controller\\', __DIR__ . '/../src/Controller/')
-        ->tag('controller.service_arguments');
 };

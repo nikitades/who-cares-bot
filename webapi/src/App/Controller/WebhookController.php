@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class WebhookController
 {
-    #[Route(path: '/api/webhook', methods: ['POST'])]
+    #[Route(path: '/api/webhook', methods: ['POST', 'GET'])]
     public function __invoke(): Response
     {
         return new Response(null, Response::HTTP_NO_CONTENT);

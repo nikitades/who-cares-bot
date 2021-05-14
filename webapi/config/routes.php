@@ -3,5 +3,5 @@
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return function (RoutingConfigurator $routes) {
-    $routes->import('../src/Controller/', 'annotation');
+    $routes->import('../src/App/Controller/', 'annotation');
 };

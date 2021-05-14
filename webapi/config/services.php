@@ -12,8 +12,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->load('Nikitades\WhoCaresBot\WebApi\\', __DIR__ . '/../src/')
-        ->exclude([__DIR__ . '/../src/DependencyInjection/', __DIR__ . '/../src/Entity/', __DIR__ . '/../src/Kernel.php', __DIR__ . '/../src/Tests/']);
+        ->exclude([__DIR__ . '/../src/DependencyInjection/', __DIR__ . '/../src/Domain/', __DIR__ . '/../src/Kernel.php']);
 
-    $services->load('Nikitades\WhoCaresBot\WebApi\Controller\\', __DIR__ . '/../src/Controller/')
+    $services->load('Nikitades\WhoCaresBot\WebApi\App\Controller\\', __DIR__ . '/../src/App/Controller/')
         ->tag('controller.service_arguments');
 };
