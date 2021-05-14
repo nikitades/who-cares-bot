@@ -1,0 +1,17 @@
+includes:
+    - phpstan-rules/vendor/phpstan/phpstan-strict-rules/rules.neon
+
+    - phpstan-rules/vendor/phpstan/phpstan-doctrine/extension.neon
+    - phpstan-rules/vendor/phpstan/phpstan-doctrine/rules.neon
+
+    - phpstan-rules/vendor/phpstan/phpstan-symfony/extension.neon
+    - phpstan-rules/vendor/phpstan/phpstan-symfony/rules.neon
+
+    - phpstan-rules/vendor/phpstan/phpstan-phpunit/extension.neon
+    - phpstan-rules/vendor/phpstan/phpstan-phpunit/rules.neon
+
+    - phpstan-rules/vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+
+parameters:
+    level: max
+    checkUninitializedProperties: true
