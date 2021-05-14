@@ -4,12 +4,12 @@ include 'php-cs-fixer-rules/PhpdocOrderThrowsAtTheEndFixer.php';
 
 use PhpCsFixer\Fixer\Phpdoc\PhpdocOrderThrowsAtTheEndFixer;
 
-$finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/../projects')
+$finder = (new PhpCsFixer\Finder())
+    ->in(__DIR__)
     ->notPath('Infrastructure/Kernel.php')
 ;
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setCacheFile('var/cache/dev/.phpcsfixer.cache')
     ->registerCustomFixers([new PhpdocOrderThrowsAtTheEndFixer()])
     ->setRules([
