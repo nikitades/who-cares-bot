@@ -5,7 +5,7 @@ include 'php-cs-fixer-rules/PhpdocOrderThrowsAtTheEndFixer.php';
 use PhpCsFixer\Fixer\Phpdoc\PhpdocOrderThrowsAtTheEndFixer;
 
 return (new PhpCsFixer\Config())
-    ->setCacheFile('var/cache/dev/.phpcsfixer.cache')
+    ->setCacheFile('var/cache/.phpcsfixer.cache')
     ->registerCustomFixers([new PhpdocOrderThrowsAtTheEndFixer()])
     ->setRules([
         '@Symfony' => true,

@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\CliCommand;
 
-use Longman\TelegramBot\Telegram;
+use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\ContainerizedTelegram;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
+use function Safe\sprintf;
 
 class SetWebhookCliCommand extends Command
 {
-    public function __construct(private Telegram $telegram)
+    public function __construct(private ContainerizedTelegram $telegram)
     {
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('webhook:set')
@@ -34,7 +35,10 @@ class SetWebhookCliCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $webhook = (string) $input->getArgument('webhook');
+            if (is_array($webhook = $input->getArgument('webhook'))) {
+                $webhook = array_shift($webhook);
+            }
+            $webhook = (string) $webhook;
             $this->telegram->setWebhook($webhook);
             (new SymfonyStyle($input, $output))->info(sprintf('Webhook successfully set to: %s', $webhook));
         } catch (Throwable $e) {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\App\Controller;
 
 use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Telegram;
+use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\ContainerizedTelegram;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class WebhookController
 {
     public function __construct(
-        private Telegram $telegram,
+        private ContainerizedTelegram $telegram,
         private LoggerInterface $logger
     ) {
     }

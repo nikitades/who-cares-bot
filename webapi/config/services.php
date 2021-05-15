@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-use Longman\TelegramBot\Telegram;
-use Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\ExceptionSubscriber;
+use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\ContainerizedTelegram;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -26,10 +25,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         )
         ->public();
 
-    $services->set(Telegram::class)
+    $services->set(ContainerizedTelegram::class)
         ->arg('$api_key', '%env(BOT_TOKEN)%')
         ->arg('$bot_username', '%env(BOT_NAME)%')
         ->call('addCommandsPath', [__DIR__ . '/../src/App/TelegramCommand/System']);
-
-    $services->set(ExceptionSubscriber::class)->tag('kernel.event_listener', ['event' => 'kernel.exception']);
 };
