@@ -27,5 +27,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ContainerizedTelegram::class)
         ->arg('$api_key', '%env(BOT_TOKEN)%')
         ->arg('$bot_username', '%env(BOT_NAME)%')
-        ->call('addCommandsPath', [__DIR__ . '/../src/App/TelegramCommand/System']);
+        ->call('addCommandsPaths', [
+            [
+                __DIR__ . '/../src/App/TelegramCommand/System',
+                __DIR__ . '/../src/App/TelegramCommand/User',
+            ],
+        ]);
 };
