@@ -15,7 +15,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->load('Nikitades\WhoCaresBot\WebApi\\', __DIR__ . '/../src/')
         ->exclude([
             __DIR__ . '/../src/App/Controller/*',
-            __DIR__ . '/../src/Domain/',
             __DIR__ . '/../src/{Kernel.php}',
         ]);
 
