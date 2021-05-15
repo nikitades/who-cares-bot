@@ -4,14 +4,38 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Telegram;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class WebhookController
 {
-    #[Route(path: '/api/webhook', methods: ['POST', 'GET'])]
+    public function __construct(
+        private Telegram $telegram,
+        private LoggerInterface $logger
+    ) {
+    }
+
+    #[
+        Route(
+            path: '/api/webhook',
+            methods: ['POST', 'GET'],
+            format: 'json'
+        )
+    ]
     public function __invoke(): Response
     {
-        return new Response('ok', Response::HTTP_OK);
+        $this->logger->info('test');
+        $this->telegram->handle();
+
+        $response = $this->telegram->getLastCommandResponse();
+
+        if ($response->isOk()) {
+            return new Response('ok', Response::HTTP_OK);
+        } else {
+            throw new TelegramException($response->getDescription(), $response->getErrorCode(), null);
+        }
     }
 }
