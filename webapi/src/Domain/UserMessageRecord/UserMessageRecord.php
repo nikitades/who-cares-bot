@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
@@ -41,6 +42,11 @@ class UserMessageRecord
     private int $authorId;
 
     /**
+     * @Column(type="datetime")
+     */
+    private DateTimeInterface $createdAt;
+
+    /**
      * @Column(type="text", nullable=true)
      */
     private ?string $text;
@@ -66,6 +72,7 @@ class UserMessageRecord
         ?int $replyToMessageId,
         int $chatId,
         int $authorId,
+        DateTimeInterface $createdAt,
         ?string $text,
         int $textLength,
         string $attachType,
@@ -76,6 +83,7 @@ class UserMessageRecord
         $this->replyToMessageId = $replyToMessageId;
         $this->chatId = $chatId;
         $this->authorId = $authorId;
+        $this->createdAt = $createdAt;
         $this->text = $text;
         $this->textLength = $textLength;
         $this->attachType = $attachType;

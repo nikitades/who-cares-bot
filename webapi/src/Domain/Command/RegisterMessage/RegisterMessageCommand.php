@@ -14,6 +14,7 @@ final class RegisterMessageCommand
         public ?int $replyToMessageId,
         public int $userId,
         public int $chatId,
+        public int $timestamp,
         public ?string $text,
         public string $attachType,
         public ?string $stickedId = null

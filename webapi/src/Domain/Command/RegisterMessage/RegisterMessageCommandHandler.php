@@ -8,6 +8,7 @@ use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecord;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
+use Safe\DateTime;
 
 class RegisterMessageCommandHandler implements CommandHandlerInterface
 {
@@ -26,6 +27,7 @@ class RegisterMessageCommandHandler implements CommandHandlerInterface
                 replyToMessageId: $command->replyToMessageId,
                 chatId: $command->chatId,
                 authorId: $command->userId,
+                createdAt: DateTime::createFromFormat('U', (string) $command->timestamp),
                 text: $command->text,
                 textLength: mb_strlen($command->text ?? ''),
                 attachType: $command->attachType,

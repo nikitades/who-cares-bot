@@ -20,6 +20,7 @@ class RegisterMessageCommandHandlerTest extends TestCase
         int $replyToMessageId,
         int $authorId,
         int $chatId,
+        int $timestamp,
         string $text,
         string $attachType,
         string $stickerId
@@ -31,15 +32,18 @@ class RegisterMessageCommandHandlerTest extends TestCase
             $userRecordRepository,
             new SymfonyUuidProvider()
         );
-        $registerMessageCommandHandler(new RegisterMessageCommand(
-            $messageId,
-            $replyToMessageId,
-            $authorId,
-            $chatId,
-            $text,
-            $attachType,
-            $stickerId
-        ));
+        $registerMessageCommandHandler(
+            new RegisterMessageCommand(
+                messageId: $messageId,
+                replyToMessageId: $replyToMessageId,
+                userId: $authorId,
+                chatId: $chatId,
+                timestamp: $timestamp,
+                text: $text,
+                attachType: $attachType,
+                stickedId: $stickerId
+            )
+        );
     }
 
     /**
@@ -53,6 +57,7 @@ class RegisterMessageCommandHandlerTest extends TestCase
                 'replyToMessageId' => 321,
                 'authorId' => 111,
                 'chatId' => 222,
+                'timestamp' => time(),
                 'text' => 'some text',
                 'attachType' => 'text',
                 'stickerId' => 'someStickerId',
