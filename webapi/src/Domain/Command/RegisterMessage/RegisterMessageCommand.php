@@ -10,6 +10,8 @@ use JetBrains\PhpStorm\Immutable;
 final class RegisterMessageCommand
 {
     public function __construct(
+        public int $messageId,
+        public ?int $replyToMessageId,
         public string $text,
         public int $userId,
         public int $chatId,

@@ -40,6 +40,8 @@ class GenericMessageCommand extends SystemCommand
         $message = $this->getMessage();
 
         $this->messageBus->dispatch(new RegisterMessageCommand(
+            messageId: $message->getMessageId(),
+            replyToMessageId: $message->getReplyToMessage()->getMessageId(),
             text: $message->getText() ?? '',
             userId: $message->getFrom()->getId(),
             chatId: $message->getChat()->getId(),
