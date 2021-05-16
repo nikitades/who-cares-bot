@@ -46,7 +46,7 @@ abstract class AbstractCustomSystemCommand extends UserCommand
      */
     protected function handle($message)
     {
-        $envelope = $this->messageBus->dispatch($message);
+        $envelope = $this->queryBus->dispatch($message);
         /** @var HandledStamp[] $handledStamps */
         $handledStamps = $envelope->all(HandledStamp::class);
 

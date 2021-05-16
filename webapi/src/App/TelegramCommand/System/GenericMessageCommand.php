@@ -20,11 +20,11 @@ class GenericMessageCommand extends AbstractCustomSystemCommand
 
         $this->dispatch(new RegisterMessageCommand(
             messageId: $message->getMessageId(),
-            replyToMessageId: $message->getReplyToMessage()?->getMessageId(),
-            text: $message->getText() ?? '',
+            replyToMessageId: $message->getReplyToMessage()?->getMessageId(), //@phpstan-ignore-line
             userId: $message->getFrom()->getId(),
             chatId: $message->getChat()->getId(),
-            stickedId: $message->getSticker()?->getFileId(),
+            text: $message->getText() ?? '',
+            stickedId: $message->getSticker()?->getFileId(), //@phpstan-ignore-line
             attachType: $message->getType()
         ));
 

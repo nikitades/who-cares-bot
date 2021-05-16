@@ -12,9 +12,9 @@ final class RegisterMessageCommand
     public function __construct(
         public int $messageId,
         public ?int $replyToMessageId,
-        public ?string $text,
         public int $userId,
         public int $chatId,
+        public ?string $text,
         public string $attachType,
         public ?string $stickedId = null
     ) {

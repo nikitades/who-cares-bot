@@ -18,7 +18,7 @@ abstract class AbstractCustomUserCommand extends UserCommand
     public function __construct(
         Telegram $telegram,
         Update $update,
-        protected MessageBusInterface $messageBus,
+        protected MessageBusInterface $queryBus,
         protected MessageBusInterface $commandBus
     ) {
         parent::__construct($telegram, $update);
@@ -46,7 +46,7 @@ abstract class AbstractCustomUserCommand extends UserCommand
      */
     protected function handle($message)
     {
-        $envelope = $this->messageBus->dispatch($message);
+        $envelope = $this->queryBus->dispatch($message);
         /** @var HandledStamp[] $handledStamps */
         $handledStamps = $envelope->all(HandledStamp::class);
 
