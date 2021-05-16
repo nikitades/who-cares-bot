@@ -18,7 +18,7 @@ abstract class AbstractCustomSystemCommand extends UserCommand
     public function __construct(
         Telegram $telegram,
         Update $update,
-        protected MessageBusInterface $messageBus,
+        protected MessageBusInterface $queryBus,
         protected MessageBusInterface $commandBus
     ) {
         parent::__construct($telegram, $update);

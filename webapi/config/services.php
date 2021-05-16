@@ -5,12 +5,16 @@ declare(strict_types=1);
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\BusAwareTelegram;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->defaults()
         ->autowire()
-        ->autoconfigure();
+        ->autoconfigure()
+        ->bind('$commandBus', service('command.bus'))
+        ->bind('$queryBus', service('query.bus'));
 
     $services->load('Nikitades\WhoCaresBot\WebApi\\', __DIR__ . '/../src/')
         ->exclude([

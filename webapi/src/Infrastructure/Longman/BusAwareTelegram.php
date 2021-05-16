@@ -14,8 +14,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class BusAwareTelegram extends Telegram
 {
     public function __construct(
-        private MessageBusInterface $commandBus,
         private MessageBusInterface $queryBus,
+        private MessageBusInterface $commandBus,
         string $api_key,
         string $bot_username = ''
     ) {
@@ -49,8 +49,8 @@ class BusAwareTelegram extends Telegram
                 $command_obj = new $command_class(
                     $this,
                     $this->update,
-                    $this->commandBus,
-                    $this->queryBus
+                    $this->queryBus,
+                    $this->commandBus
                 );
 
                 if (Command::AUTH_SYSTEM === $auth && $command_obj instanceof SystemCommand) {
