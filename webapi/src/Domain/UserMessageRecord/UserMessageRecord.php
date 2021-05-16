@@ -68,8 +68,8 @@ class UserMessageRecord
         int $authorId,
         ?string $text,
         int $textLength,
-        ?string $stickerId,
-        string $attachType
+        string $attachType,
+        ?string $stickerId
     ) {
         $this->id = $id;
         $this->messageId = $messageId;
@@ -78,7 +78,7 @@ class UserMessageRecord
         $this->authorId = $authorId;
         $this->text = $text;
         $this->textLength = $textLength;
-        $this->stickerId = $stickerId;
         $this->attachType = $attachType;
+        $this->stickerId = $stickerId;
     }
 }

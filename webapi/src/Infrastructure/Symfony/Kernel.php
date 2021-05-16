@@ -2,7 +2,10 @@
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony;
 
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Query\QueryHandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -34,5 +37,16 @@ class Kernel extends BaseKernel
         } elseif (is_file($path = \dirname(__DIR__) . '/../../config/routes.php')) {
             (require $path)($routes->withPath($path), $this);
         }
+    }
+
+    public function build(ContainerBuilder $containerBuilder): void
+    {
+        parent::build($containerBuilder);
+
+        $containerBuilder->registerForAutoconfiguration(CommandHandlerInterface::class)
+            ->addTag('messenger.message_handler', ['bus' => 'command.bus']);
+
+        $containerBuilder->registerForAutoconfiguration(QueryHandlerInterface::class)
+            ->addTag('messenger.message_handler', ['bus' => 'query.bus']);
     }
 }

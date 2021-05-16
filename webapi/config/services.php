@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\Domain\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\WhoDay\WhoDayQuery;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\WhoDay\WhoDayQueryHandler;
-use Nikitades\WhoCaresBot\WebApi\Domain\QueryHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\BusAwareTelegram;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -37,13 +33,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 __DIR__ . '/../src/App/TelegramCommand/User',
             ],
         ]);
-
-    $services->instanceof(CommandHandlerInterface::class)
-        ->tag('messenger.message_handler', ['bus' => 'command.bus']);
-
-    $services->instanceof(QueryHandlerInterface::class)
-        ->tag('messenger.message_handler', ['bus' => 'query.bus']);
-
-    // $services->set(WhoDayQueryHandler::class)
-    //     ->tag('messenger.message_handler', ['bus' => 'query.bus']);
 };

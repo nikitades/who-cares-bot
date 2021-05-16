@@ -20,11 +20,11 @@ class GenericMessageCommand extends AbstractCustomSystemCommand
 
         $this->dispatch(new RegisterMessageCommand(
             messageId: $message->getMessageId(),
-            replyToMessageId: $message->getReplyToMessage()->getMessageId(),
+            replyToMessageId: $message->getReplyToMessage()?->getMessageId(),
             text: $message->getText() ?? '',
             userId: $message->getFrom()->getId(),
             chatId: $message->getChat()->getId(),
-            stickedId: $message->getSticker()->getFileId(),
+            stickedId: $message->getSticker()?->getFileId(),
             attachType: $message->getType()
         ));
 

@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('doctrine_migrations', [
         'migrations_paths' => [
-            'DoctrineMigrations' => '%kernel.project_dir%/src/Infrastructure/Doctrine/Migration',
+            'Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Migration' => '%kernel.project_dir%/src/Infrastructure/Doctrine/Migration',
         ],
     ]);
 
