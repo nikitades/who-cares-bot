@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -59,4 +59,26 @@ class UserMessageRecord
      * @Column(type="text")
      */
     private string $attachType;
+
+    public function __construct(
+        Uuid $id,
+        int $messageId,
+        ?int $replyToMessageId,
+        int $chatId,
+        int $authorId,
+        ?string $text,
+        int $textLength,
+        ?string $stickerId,
+        string $attachType
+    ) {
+        $this->id = $id;
+        $this->messageId = $messageId;
+        $this->replyToMessageId = $replyToMessageId;
+        $this->chatId = $chatId;
+        $this->authorId = $authorId;
+        $this->text = $text;
+        $this->textLength = $textLength;
+        $this->stickerId = $stickerId;
+        $this->attachType = $attachType;
+    }
 }

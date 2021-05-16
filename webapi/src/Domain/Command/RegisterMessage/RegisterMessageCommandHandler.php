@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage;
 
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 
-class RegisterMessageCommandHandler implements MessageHandlerInterface
+class RegisterMessageCommandHandler implements CommandHandlerInterface
 {
     public function __invoke(RegisterMessageCommand $command): void
     {

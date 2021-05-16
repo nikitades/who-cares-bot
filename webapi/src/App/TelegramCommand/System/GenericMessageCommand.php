@@ -4,34 +4,13 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\System;
 
-use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomSystemCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage\RegisterMessageCommand;
-use Symfony\Component\Messenger\MessageBusInterface;
 
-class GenericMessageCommand extends SystemCommand
+class GenericMessageCommand extends AbstractCustomSystemCommand
 {
-    /**
-     * @param Telegram $telegram
-     * @param Update $update
-     * @param MessageBusInterface $messageBus
-     */
-    public function __construct(
-        protected $telegram,
-        protected $update,
-        private MessageBusInterface $messageBus
-    ) {
-        parent::__construct($telegram, $update);
-    }
-
-    /**
-     * @var string
-     */
-    protected $name = 'genericmessage';
-
     /**
      * {@inheritDoc}
      */
@@ -39,7 +18,7 @@ class GenericMessageCommand extends SystemCommand
     {
         $message = $this->getMessage();
 
-        $this->messageBus->dispatch(new RegisterMessageCommand(
+        $this->dispatch(new RegisterMessageCommand(
             messageId: $message->getMessageId(),
             replyToMessageId: $message->getReplyToMessage()->getMessageId(),
             text: $message->getText() ?? '',

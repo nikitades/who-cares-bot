@@ -11,10 +11,11 @@ use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Telegram;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class ContainerizedTelegram extends Telegram
+class BusAwareTelegram extends Telegram
 {
     public function __construct(
-        private MessageBusInterface $messageBus,
+        private MessageBusInterface $commandBus,
+        private MessageBusInterface $queryBus,
         string $api_key,
         string $bot_username = ''
     ) {
@@ -45,7 +46,12 @@ class ContainerizedTelegram extends Telegram
             $command_class = $this->getCommandClassName($auth, $command, $filepath);
 
             if (null !== $command_class) {
-                $command_obj = new $command_class($this, $this->update, $this->messageBus);
+                $command_obj = new $command_class(
+                    $this,
+                    $this->update,
+                    $this->commandBus,
+                    $this->queryBus
+                );
 
                 if (Command::AUTH_SYSTEM === $auth && $command_obj instanceof SystemCommand) {
                     return $command_obj;

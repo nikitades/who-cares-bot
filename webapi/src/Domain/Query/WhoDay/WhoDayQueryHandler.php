@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Domain\Query\WhoDay;
 
+use Nikitades\WhoCaresBot\WebApi\Domain\Query\QueryHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\UserPosition;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class WhoDayQueryHandler implements MessageHandlerInterface
+class WhoDayQueryHandler implements QueryHandlerInterface
 {
     public function __invoke(WhoDayQuery $query): WhoDayQueryResponse
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\CliCommand;
 
-use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\ContainerizedTelegram;
+use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\BusAwareTelegram;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use function Safe\sprintf;
 
 class SetWebhookCliCommand extends Command
 {
-    public function __construct(private ContainerizedTelegram $telegram)
+    public function __construct(private BusAwareTelegram $telegram)
     {
         parent::__construct();
     }
