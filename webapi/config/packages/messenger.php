@@ -17,6 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     ],
                 ],
                 'query.bus' => null,
+                'message.renderer.bus' => null,
             ],
         ],
     ]);

@@ -22,6 +22,7 @@ class GenericMessageCommand extends AbstractCustomSystemCommand
             messageId: $message->getMessageId(),
             replyToMessageId: $message->getReplyToMessage()?->getMessageId(), //@phpstan-ignore-line
             userId: $message->getFrom()->getId(),
+            userNickname: $message->getFrom()->getUsername(),
             chatId: $message->getChat()->getId(),
             timestamp: $message->getDate(),
             text: $message->getText() ?? '',

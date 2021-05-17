@@ -18,8 +18,9 @@ class RegisterMessageCommandHandlerTest extends TestCase
     public function testRecordIsSaved(
         int $messageId,
         int $replyToMessageId,
-        int $authorId,
         int $chatId,
+        int $userId,
+        string $userNickname,
         int $timestamp,
         string $text,
         string $attachType,
@@ -36,8 +37,9 @@ class RegisterMessageCommandHandlerTest extends TestCase
             new RegisterMessageCommand(
                 messageId: $messageId,
                 replyToMessageId: $replyToMessageId,
-                userId: $authorId,
                 chatId: $chatId,
+                userId: $userId,
+                userNickname: $userNickname,
                 timestamp: $timestamp,
                 text: $text,
                 attachType: $attachType,
@@ -55,8 +57,9 @@ class RegisterMessageCommandHandlerTest extends TestCase
             [
                 'messageId' => 123,
                 'replyToMessageId' => 321,
-                'authorId' => 111,
                 'chatId' => 222,
+                'userId' => 111,
+                'userNickname' => 'amogus',
                 'timestamp' => time(),
                 'text' => 'some text',
                 'attachType' => 'text',

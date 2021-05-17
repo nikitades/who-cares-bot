@@ -13,6 +13,7 @@ final class RegisterMessageCommand
         public int $messageId,
         public ?int $replyToMessageId,
         public int $userId,
+        public string $userNickname,
         public int $chatId,
         public int $timestamp,
         public ?string $text,

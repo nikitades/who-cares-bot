@@ -27,6 +27,7 @@ class RegisterMessageCommandHandler implements CommandHandlerInterface
                 replyToMessageId: $command->replyToMessageId,
                 chatId: $command->chatId,
                 authorId: $command->userId,
+                authorNickname: $command->userNickname,
                 createdAt: DateTime::createFromFormat('U', (string) $command->timestamp),
                 text: $command->text,
                 textLength: mb_strlen($command->text ?? ''),

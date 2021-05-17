@@ -16,6 +16,7 @@ class BusAwareTelegram extends Telegram
     public function __construct(
         private MessageBusInterface $queryBus,
         private MessageBusInterface $commandBus,
+        private MessageBusInterface $messageRendererBus,
         string $api_key,
         string $bot_username = ''
     ) {
@@ -50,7 +51,8 @@ class BusAwareTelegram extends Telegram
                     $this,
                     $this->update,
                     $this->queryBus,
-                    $this->commandBus
+                    $this->commandBus,
+                    $this->messageRendererBus
                 );
 
                 if (Command::AUTH_SYSTEM === $auth && $command_obj instanceof SystemCommand) {

@@ -2,6 +2,7 @@
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony;
 
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseRendererInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\QueryHandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -48,5 +49,8 @@ class Kernel extends BaseKernel
 
         $containerBuilder->registerForAutoconfiguration(QueryHandlerInterface::class)
             ->addTag('messenger.message_handler', ['bus' => 'query.bus']);
+
+        $containerBuilder->registerForAutoconfiguration(ResponseRendererInterface::class)
+            ->addTag('messenger.message_handler', ['bus' => 'message.renderer.bus']);
     }
 }
