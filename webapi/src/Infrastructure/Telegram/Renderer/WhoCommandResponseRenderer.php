@@ -16,16 +16,18 @@ class WhoCommandResponseRenderer implements ResponseRendererInterface
      */
     public function __invoke(WhoCommandResponseRenderRequest $renderRequest): array
     {
+        $text = 0 === count($renderRequest->userPositions) ? 'No messages registered!' : implode(
+            "\n",
+            array_map(
+                fn (UserPosition $userPosition): string => sprintf('**%s**: %s', $userPosition->userNickname, $userPosition->userMessagesCount),
+                $renderRequest->userPositions
+            ),
+        );
+
         return [
             'chat_id' => $renderRequest->chatId,
             'parse_mode' => 'Markdown',
-            'text' => implode(
-                "\n",
-                array_map(
-                    fn (UserPosition $userPosition): string => sprintf('**%s**: %s', $userPosition->userNickname, $userPosition->userMessagesCount),
-                    $renderRequest->userPositions
-                ),
-            ),
+            'text' => $text,
             //TODO[image chart attach]
         ];
     }

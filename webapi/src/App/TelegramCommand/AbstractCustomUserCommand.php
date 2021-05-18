@@ -25,7 +25,7 @@ abstract class AbstractCustomUserCommand extends UserCommand
         MessageBusInterface $presenterBus
     ) {
         parent::__construct($telegram, $update);
-        $this->presenterBus = $queryBus;
+        $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
         $this->presenterBus = $presenterBus;
     }

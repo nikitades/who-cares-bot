@@ -39,12 +39,12 @@ class UserMessageRecord
     /**
      * @Column(type="integer")
      */
-    private int $authorId;
+    private int $userId;
 
     /**
      * @Column(type="string")
      */
-    private string $authorNickname;
+    private string $userNickname;
 
     /**
      * @Column(type="datetime")
@@ -76,8 +76,8 @@ class UserMessageRecord
         int $messageId,
         ?int $replyToMessageId,
         int $chatId,
-        int $authorId,
-        string $authorNickname,
+        int $userId,
+        string $userNickname,
         DateTimeInterface $createdAt,
         ?string $text,
         int $textLength,
@@ -88,8 +88,8 @@ class UserMessageRecord
         $this->messageId = $messageId;
         $this->replyToMessageId = $replyToMessageId;
         $this->chatId = $chatId;
-        $this->authorNickname = $authorNickname;
-        $this->authorId = $authorId;
+        $this->userNickname = $userNickname;
+        $this->userId = $userId;
         $this->createdAt = $createdAt;
         $this->text = $text;
         $this->textLength = $textLength;

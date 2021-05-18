@@ -18,16 +18,9 @@ final class WebhookController
     ) {
     }
 
-    #[
-        Route(
-            path: '/api/webhook',
-            methods: ['POST', 'GET'],
-            format: 'json'
-        )
-    ]
+    #[Route(path: '/api/webhook', methods: ['POST', 'GET'], format: 'json')]
     public function __invoke(): Response
     {
-        $this->logger->info('test');
         $this->telegram->handle();
 
         $response = $this->telegram->getLastCommandResponse();
