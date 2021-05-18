@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\Renderer;
+namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\Renderer;
 
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseRendererInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponseRenderRequest;

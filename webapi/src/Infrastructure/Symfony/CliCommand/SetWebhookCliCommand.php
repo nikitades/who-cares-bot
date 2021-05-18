@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\CliCommand;
 
-use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\BusAwareTelegram;
+use Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\BusAwareTelegram;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

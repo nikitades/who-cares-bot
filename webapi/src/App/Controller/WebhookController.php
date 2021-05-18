@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\App\Controller;
 
 use Longman\TelegramBot\Exception\TelegramException;
-use Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman\BusAwareTelegram;
+use Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\BusAwareTelegram;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

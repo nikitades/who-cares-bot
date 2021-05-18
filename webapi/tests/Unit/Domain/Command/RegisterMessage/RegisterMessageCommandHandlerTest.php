@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Test\Domain\Command\RegisterMessage;
+namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\Domain\Command\RegisterMessage;
 
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage\RegisterMessageCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage\RegisterMessageCommandHandler;

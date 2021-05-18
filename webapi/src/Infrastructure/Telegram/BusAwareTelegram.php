@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Longman;
+namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram;
 
 use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Commands\Command;
