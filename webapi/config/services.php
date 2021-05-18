@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseRendererInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
+
+use Nikitades\WhoCaresBot\WebApi\Domain\Query\QueryHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\BusAwareTelegram;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -15,6 +18,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure()
         ->bind('$commandBus', service('command.bus'))
         ->bind('$queryBus', service('query.bus'));
+
+    $services->instanceof(CommandHandlerInterface::class)
+        ->tag('messenger.message_handler', ['bus' => 'command.bus']);
+
+    $services->instanceof(QueryHandlerInterface::class)
+        ->tag('messenger.message_handler', ['bus' => 'query.bus']);
+
+    $services->instanceof(ResponseRendererInterface::class)
+        ->tag('messenger.message_handler', ['bus' => 'message.renderer.bus']);
 
     $services->load('Nikitades\WhoCaresBot\WebApi\\', __DIR__ . '/../src/')
         ->exclude([

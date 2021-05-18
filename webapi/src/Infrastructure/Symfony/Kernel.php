@@ -39,18 +39,4 @@ class Kernel extends BaseKernel
             (require $path)($routes->withPath($path), $this);
         }
     }
-
-    public function build(ContainerBuilder $containerBuilder): void
-    {
-        parent::build($containerBuilder);
-
-        $containerBuilder->registerForAutoconfiguration(CommandHandlerInterface::class)
-            ->addTag('messenger.message_handler', ['bus' => 'command.bus']);
-
-        $containerBuilder->registerForAutoconfiguration(QueryHandlerInterface::class)
-            ->addTag('messenger.message_handler', ['bus' => 'query.bus']);
-
-        $containerBuilder->registerForAutoconfiguration(ResponseRendererInterface::class)
-            ->addTag('messenger.message_handler', ['bus' => 'message.renderer.bus']);
-    }
 }
