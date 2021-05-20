@@ -19,7 +19,6 @@ class WhoDayQueryHandler implements QueryHandlerInterface
         /** @var array<UserPosition> $userPositions */
         $userPositions = $this->userRecordRepository->findPositionsWithinDays(1, 4);
 
-        //TODO: aggregate by users
         return new WhoDayQueryResponse(
             userPositions: $userPositions,
             imageContent: 'a'

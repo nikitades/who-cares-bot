@@ -2,11 +2,7 @@
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony;
 
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseRendererInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\QueryHandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;

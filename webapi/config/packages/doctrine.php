@@ -11,7 +11,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]);
 
-    //TODO: сделать чтобы доктрина сгенерировала стартовую миграцию
     $containerConfigurator->extension('doctrine', [
         'orm' => [
             'auto_generate_proxy_classes' => true,
