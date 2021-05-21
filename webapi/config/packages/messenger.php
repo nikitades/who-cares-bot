@@ -7,7 +7,15 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('framework', [
         'messenger' => [
-            'transports' => null,
+            'transports' => [
+                'sync' => 'sync://',
+                'async' => [
+                    'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
+                    'options' => [
+                        'auto_setup' => false,
+                    ],
+                ],
+            ],
             'routing' => null,
             'default_bus' => 'query.bus',
             'buses' => [
