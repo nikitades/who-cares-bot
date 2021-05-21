@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who;
+namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\WhoDay;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomUserCommand;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoDayQuery;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponseRenderRequest;
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoQueryResponse;
+use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoWeekQuery;
 
-class WhoCommand extends AbstractCustomUserCommand
+class WhoWeekCommand extends AbstractCustomUserCommand
 {
     public function execute(): ServerResponse
     {
@@ -18,7 +19,7 @@ class WhoCommand extends AbstractCustomUserCommand
 
         /** @var WhoQueryResponse $queryResponse */
         $queryResponse = $this->handle(
-            new WhoDayQuery(
+            new WhoWeekQuery(
                 $message->getChat()->getId(),
                 $message->getFrom()->getId()
             )
