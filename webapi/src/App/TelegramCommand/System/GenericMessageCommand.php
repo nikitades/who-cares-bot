@@ -30,9 +30,6 @@ class GenericMessageCommand extends AbstractCustomSystemCommand
             attachType: $message->getType()
         ));
 
-        return Request::sendMessage([
-            'chat_id' => $message->getChat()->getId(),
-            'text' => $message->getText() ?? $message->getType(),
-        ]);
+        return Request::emptyResponse();
     }
 }

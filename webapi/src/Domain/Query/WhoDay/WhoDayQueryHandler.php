@@ -17,7 +17,7 @@ class WhoDayQueryHandler implements QueryHandlerInterface
     public function __invoke(WhoDayQuery $query): WhoDayQueryResponse
     {
         /** @var array<UserPosition> $userPositions */
-        $userPositions = $this->userRecordRepository->findPositionsWithinDays(1, 4);
+        $userPositions = $this->userRecordRepository->findPositionsWithinDays($query->chatId, 1, 4);
 
         return new WhoDayQueryResponse(
             userPositions: $userPositions,

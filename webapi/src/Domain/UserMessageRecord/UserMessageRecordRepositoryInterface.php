@@ -13,5 +13,5 @@ interface UserMessageRecordRepositoryInterface
     /**
      * @return array<UserPosition>
      */
-    public function findPositionsWithinDays(int $daysAmount, int $topUsersCount): array;
+    public function findPositionsWithinDays(int $chatId, int $daysAmount, int $topUsersCount): array;
 }

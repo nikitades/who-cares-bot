@@ -8,10 +8,19 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\Table;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @Entity
+ * @Table(
+ *     indexes={
+ *         @Index(
+ *             name="created_at_chat_id_idx", columns={"created_at", "chat_id"}
+ *         )
+ *     }
+ * )
  */
 class UserMessageRecord
 {
