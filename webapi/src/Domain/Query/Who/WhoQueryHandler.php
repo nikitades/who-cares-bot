@@ -14,16 +14,12 @@ class WhoQueryHandler implements QueryHandlerInterface
     {
     }
 
-    public function __invoke(WhoDayQuery | WhoWeekQuery $query): WhoQueryResponse
+    public function __invoke(WhoQuery $query): WhoQueryResponse
     {
         /** @var array<UserPosition> $userPositions */
         $userPositions = $this->userRecordRepository->findPositionsWithinDays(
             $query->chatId,
-            match ($query::class) {
-                WhoDayQuery::class => 1,
-                WhoWeekQuery::class => 7,
-                default => 1
-            },
+            $query->daysCount,
             4
         );
 

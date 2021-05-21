@@ -10,7 +10,7 @@ use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomUserCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoQuery;
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoQueryResponse;
 
-class WhoCommand extends AbstractCustomUserCommand
+class WhoTwoWeeksCommand extends AbstractCustomUserCommand
 {
     public function execute(): ServerResponse
     {
@@ -21,7 +21,7 @@ class WhoCommand extends AbstractCustomUserCommand
             new WhoQuery(
                 $message->getChat()->getId(),
                 $message->getFrom()->getId(),
-                1
+                14
             )
         );
 
