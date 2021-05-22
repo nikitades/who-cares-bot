@@ -50,6 +50,20 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
         );
     }
 
+    /**
+     * @return array<UserMessageRecord>
+     */
+    public function getAllRecordsWithinDays(int $chatId, int $daysAmount): array
+    {
+        $dateFrom = (new DateTime('midnight'))->sub(new DateInterval(sprintf('P%sD', $daysAmount - 1)));
+
+        return $this->createQueryBuilder('r')
+            ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $dateFrom)
+            ->andWhere('r.chatId = :chatId')->setParameter('chatId', $chatId)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(UserMessageRecord $record): void
     {
         $this->getEntityManager()->persist($record);

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateTop\GenerateTopCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -16,12 +17,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     ],
                 ],
             ],
-            'routing' => null,
+            'routing' => [
+                GenerateTopCommand::class => 'async',
+            ],
             'default_bus' => 'query.bus',
             'buses' => [
                 'command.bus' => [
                     'middleware' => [
                         'doctrine_transaction',
+                        'doctrine_ping_connection',
                     ],
                 ],
                 'query.bus' => null,

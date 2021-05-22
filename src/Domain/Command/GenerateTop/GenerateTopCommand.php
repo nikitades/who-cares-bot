@@ -11,7 +11,6 @@ class GenerateTopCommand
 {
     public function __construct(
         public int $withinDays,
-        public int $topUsersCount,
         public int $chatId
     ) {
     }
