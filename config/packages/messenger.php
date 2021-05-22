@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateTop\GenerateTopCommand;
+use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateTop\GenerateTopCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -29,7 +29,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     ],
                 ],
                 'query.bus' => null,
-                'message.renderer.bus' => null,
             ],
         ],
     ]);

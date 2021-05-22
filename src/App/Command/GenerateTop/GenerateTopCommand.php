@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateTop;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateTop;
 
 use JetBrains\PhpStorm\Immutable;
 

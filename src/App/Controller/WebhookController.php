@@ -7,10 +7,11 @@ namespace Nikitades\WhoCaresBot\WebApi\App\Controller;
 use Longman\TelegramBot\Exception\TelegramException;
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\BusAwareTelegram;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class WebhookController
+final class WebhookController extends AbstractController
 {
     public function __construct(
         private BusAwareTelegram $telegram,

@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\Infrastructure\Telegram\Renderer;
+namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\App\TelegramCommand\User\Who;
 
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponseRenderRequest;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\UserPosition;
-use Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\Renderer\WhoCommandResponseRenderer;
 use PHPUnit\Framework\TestCase;
 
-class WhoCommandResponseRendererTest extends TestCase
+class WhoCommandResponseTest extends TestCase
 {
     public function testRender(): void
     {
@@ -25,10 +24,10 @@ class WhoCommandResponseRendererTest extends TestCase
             7
         );
 
-        $result = (new WhoCommandResponseRenderer())(new WhoCommandResponseRenderRequest(
-            $desiredChatId,
-            [$userPosition1, $userPosition2]
-        ));
+        $result = (new WhoCommandResponse(
+            [$userPosition1, $userPosition2],
+            $desiredChatId
+        ))->toArray();
 
         static::assertEquals([
             'chat_id' => $desiredChatId,

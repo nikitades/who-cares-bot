@@ -6,32 +6,19 @@ namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
+use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWho\GenerateWhoCommand;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomUserCommand;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoQuery;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\Who\WhoQueryResponse;
 
 class WhoWeekCommand extends AbstractCustomUserCommand
 {
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();
+        $this->dispatch(new GenerateWhoCommand(
+            $this->getMessage()->getChat()->getId(),
+            $this->getMessage()->getFrom()->getId(),
+            7
+        ));
 
-        /** @var WhoQueryResponse $queryResponse */
-        $queryResponse = $this->handle(
-            new WhoQuery(
-                $message->getChat()->getId(),
-                $message->getFrom()->getId(),
-                7
-            )
-        );
-
-        return Request::sendMessage(
-            $this->renderMessage(
-                new WhoCommandResponseRenderRequest(
-                    $message->getChat()->getId(),
-                    $queryResponse->userPositions
-                )
-            )
-        );
+        return Request::emptyResponse();
     }
 }
