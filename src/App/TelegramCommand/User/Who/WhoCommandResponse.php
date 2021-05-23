@@ -16,7 +16,8 @@ class WhoCommandResponse
      */
     public function __construct(
         private array $userPositions,
-        private int $chatId
+        private int $chatId,
+        private string $imageContent
     ) {
         $this->text = 0 === count($userPositions) ? 'No messages registered!' : implode(
             "\n",
@@ -30,12 +31,12 @@ class WhoCommandResponse
     /**
      * @return array<string,int|string>
      */
-    public function toArray(): array
+    public function toSendPhoto(): array
     {
         return [
             'chat_id' => $this->chatId,
             'parse_mode' => 'Markdown',
-            'text' => $this->text,
+            'caption' => $this->text,
             //TODO[image chart attach]
         ];
     }

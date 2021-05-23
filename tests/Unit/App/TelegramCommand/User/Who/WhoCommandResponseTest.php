@@ -26,13 +26,14 @@ class WhoCommandResponseTest extends TestCase
 
         $result = (new WhoCommandResponse(
             [$userPosition1, $userPosition2],
-            $desiredChatId
-        ))->toArray();
+            $desiredChatId,
+            ''
+        ))->toSendPhoto();
 
         static::assertEquals([
             'chat_id' => $desiredChatId,
             'parse_mode' => 'Markdown',
-            'text' => '**someUser1**: 5
+            'caption' => '**someUser1**: 5
 **someUser2**: 7',
         ], $result);
     }
