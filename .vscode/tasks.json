@@ -1,0 +1,25 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Enable XDebug",
+            "type": "shell",
+            "command": "echo 'xdebug.start_with_request=yes' >> /Users/ars/.phpbrew/php/php-8.0.2/var/db/xdebug.ini",
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
+        },
+        {
+            "label": "Disable XDebug",
+            "type": "shell",
+            "command": "sed -i.bu '/xdebug.start_with_request=yes/d' /Users/ars/.phpbrew/php/php-8.0.2/var/db/xdebug.ini",
+            "presentation": {
+                "reveal": "silent",
+                "clear": true
+            }
+        }
+    ]
+}
