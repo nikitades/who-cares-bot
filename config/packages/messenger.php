@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateTop\GenerateTopCommand;
+use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateTop\GeneratePeakAnalysisCommand;
+use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWho\GenerateWhoCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -18,7 +19,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             ],
             'routing' => [
-                GenerateTopCommand::class => 'async',
+                GeneratePeakAnalysisCommand::class => 'async',
+                GenerateWhoCommand::class => 'async',
             ],
             'default_bus' => 'query.bus',
             'buses' => [

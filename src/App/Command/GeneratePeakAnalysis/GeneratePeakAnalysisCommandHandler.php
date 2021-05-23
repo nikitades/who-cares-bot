@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateTop;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysis;
 
 use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Twig\Environment;
 
-class GenerateTopCommandHandler implements CommandHandlerInterface
+class GeneratePeakAnalysisCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
@@ -17,7 +17,7 @@ class GenerateTopCommandHandler implements CommandHandlerInterface
     ) {
     }
 
-    public function __invoke(GenerateTopCommand $command): void
+    public function __invoke(GeneratePeakAnalysisCommand $command): void
     {
         $messageRecords = $this->userMessageRecordRepository->getAllRecordsWithinDays($command->chatId, $command->withinDays);
 

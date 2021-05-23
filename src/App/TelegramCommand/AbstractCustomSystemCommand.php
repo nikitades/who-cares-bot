@@ -13,7 +13,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 abstract class AbstractCustomSystemCommand extends UserCommand
 {
     use HandleTrait;
-    use RenderMessageTrait;
 
     protected MessageBusInterface $commandBus;
 
@@ -21,13 +20,11 @@ abstract class AbstractCustomSystemCommand extends UserCommand
         Telegram $telegram,
         Update $update,
         MessageBusInterface $queryBus,
-        MessageBusInterface $commandBus,
-        MessageBusInterface $presenterBus
+        MessageBusInterface $commandBus
     ) {
         parent::__construct($telegram, $update);
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
-        $this->presenterBus = $presenterBus;
     }
 
     protected function dispatch(object $command): void

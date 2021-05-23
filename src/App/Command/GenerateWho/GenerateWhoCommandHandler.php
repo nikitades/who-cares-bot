@@ -9,23 +9,26 @@ use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class GenerateWhoCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private UserMessageRecordRepositoryInterface $userMessageRecordRepository
+        private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
+        private CacheInterface $cache
     ) {
     }
 
     public function __invoke(GenerateWhoCommand $command): ServerResponse
     {
-        $userPositions = $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 4);
-
-        $whoResponse = new WhoCommandResponse(
-            $userPositions,
-            $command->chatId
+        $whoCommandResponse = $this->cache->get(
+            serialize($command),
+            fn (): WhoCommandResponse => new WhoCommandResponse(
+                $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 4),
+                $command->chatId
+            )
         );
 
-        return Request::sendMessage($whoResponse->toArray());
+        return Request::sendMessage($whoCommandResponse->toArray());
     }
 }
