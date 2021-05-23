@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\GenerateTop;
+namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\GeneratePeakAnalysis;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;

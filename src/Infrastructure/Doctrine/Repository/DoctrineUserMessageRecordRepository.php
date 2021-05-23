@@ -29,7 +29,7 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
      */
     public function findPositionsWithinDays(int $chatId, int $daysAmount, int $topUsersCount): array
     {
-        $dateFrom = (new DateTime('midnight'))->sub(new DateInterval(sprintf('P%sD', $daysAmount - 1)));
+        $dateFrom = (new DateTime('midnight'))->sub(new DateInterval(sprintf('P%sDT3H', $daysAmount - 1)));
 
         $result = $this->createQueryBuilder('r')
             ->select('COUNT(r.id) as totalCount, r.userId, r.userNickname')

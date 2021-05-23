@@ -10,6 +10,8 @@ use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponse
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use function Safe\sprintf;
 
 class GenerateWhoCommandHandler implements CommandHandlerInterface
 {
@@ -22,11 +24,14 @@ class GenerateWhoCommandHandler implements CommandHandlerInterface
     public function __invoke(GenerateWhoCommand $command): ServerResponse
     {
         $whoCommandResponse = $this->cache->get(
-            serialize($command),
-            fn (): WhoCommandResponse => new WhoCommandResponse(
-                $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 4),
-                $command->chatId
-            )
+            sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->daysAmount, 4),
+            function (ItemInterface $item) use ($command): WhoCommandResponse {
+                $item->expiresAfter(30);
+                return new WhoCommandResponse(
+                    $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 4),
+                    $command->chatId
+                );
+            }
         );
 
         return Request::sendMessage($whoCommandResponse->toArray());
