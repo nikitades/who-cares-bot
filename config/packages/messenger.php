@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateTop\GeneratePeakAnalysisCommand;
+use Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysis\GeneratePeakAnalysisCommand;
 use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWho\GenerateWhoCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
