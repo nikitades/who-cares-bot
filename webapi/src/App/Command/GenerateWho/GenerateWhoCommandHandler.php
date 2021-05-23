@@ -26,10 +26,11 @@ class GenerateWhoCommandHandler implements CommandHandlerInterface
 
     public function __invoke(GenerateWhoCommand $command): ServerResponse
     {
+        /** @var WhoCommandResponse $whoCommandResponse */
         $whoCommandResponse = $this->cache->get(
             sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->daysAmount, 4),
             function (ItemInterface $item) use ($command): WhoCommandResponse {
-                $item->expiresAfter(30);
+                $item->expiresAfter(60);
                 $positions = $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 4);
 
                 return new WhoCommandResponse(
@@ -49,6 +50,6 @@ class GenerateWhoCommandHandler implements CommandHandlerInterface
             }
         );
 
-        return Request::sendMessage($whoCommandResponse->toArray());
+        return Request::sendPhoto($whoCommandResponse->toSendPhoto());
     }
 }

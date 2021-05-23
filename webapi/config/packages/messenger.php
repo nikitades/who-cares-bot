@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'buses' => [
                 'command.bus' => [
                     'middleware' => [
-                        'doctrine_transaction',
+                        // 'doctrine_transaction',
                         'doctrine_ping_connection',
                     ],
                 ],

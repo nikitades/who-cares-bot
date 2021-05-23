@@ -7,8 +7,8 @@ namespace Nikitades\WhoCaresBot\WebApi\App\Command;
 interface RenderedPageProviderInterface
 {
     /**
-     * @param array<string> $titles
+     * @param array<string> $labels
      * @param array<int> $positions
      */
-    public function getRegularTopImage(array $titles, array $positions): string;
+    public function getRegularTopImage(array $labels, array $positions): string;
 }

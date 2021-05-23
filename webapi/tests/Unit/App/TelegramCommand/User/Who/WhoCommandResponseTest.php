@@ -30,11 +30,13 @@ class WhoCommandResponseTest extends TestCase
             ''
         ))->toSendPhoto();
 
+        static::assertArrayHasKey('photo', $result);
         static::assertEquals([
             'chat_id' => $desiredChatId,
             'parse_mode' => 'Markdown',
             'caption' => '**someUser1**: 5
 **someUser2**: 7',
+            'photo' => $result['photo'],
         ], $result);
     }
 }

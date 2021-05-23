@@ -67,5 +67,6 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
     public function save(UserMessageRecord $record): void
     {
         $this->getEntityManager()->persist($record);
+        $this->getEntityManager()->flush();
     }
 }

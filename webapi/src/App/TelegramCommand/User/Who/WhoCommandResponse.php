@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who;
 
+use Longman\TelegramBot\Request;
+
 use Nikitades\WhoCaresBot\WebApi\Domain\Query\UserPosition;
 use function Safe\sprintf;
+use function Safe\tempnam;
+use function Safe\file_put_contents;
 
 class WhoCommandResponse
 {
@@ -29,15 +33,18 @@ class WhoCommandResponse
     }
 
     /**
-     * @return array<string,int|string>
+     * @return array<string,int|string|resource>
      */
     public function toSendPhoto(): array
     {
+        $tmpFilePath = tempnam('/tmp', 'nkitades_whocaresbot');
+        file_put_contents($tmpFilePath, $this->imageContent);
+
         return [
             'chat_id' => $this->chatId,
             'parse_mode' => 'Markdown',
             'caption' => $this->text,
-            //TODO[image chart attach]
+            'photo' => Request::encodeFile($tmpFilePath),
         ];
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use Exception;
+use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequestRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
@@ -12,16 +14,22 @@ use Twig\Environment;
 final class GetTopMarkupController
 {
     public function __construct(
-        private Environment $twigEnvironment
+        private Environment $twigEnvironment,
+        private RenderRequestRepositoryInterface $renderRequestRepository,
+        private LoggerInterface $logger
     ) {
     }
 
-    #[Route(path: '/markup/top', methods: ['GET', 'PUT'])]
-    public function __invoke(Request $request): Response
+    #[Route(path: '/markup/top/{renderRequestId}', methods: ['GET'])]
+    public function __invoke(string $renderRequestId): Response
     {
-        return new Response($this->twigEnvironment->render('top.twig', [
-            'labels' => ['One', 'Two', 'Three'],
-            'data' => [1, 2, 3],
-        ]));
+        $renderRequest = $this->renderRequestRepository->findById($renderRequestId);
+
+        if (null === $renderRequest) {
+            $this->logger->error('No render request found by key ' . $renderRequestId);
+            throw new Exception('No render request found by key ' . $renderRequestId);
+        }
+
+        return new Response($this->twigEnvironment->render('top.twig', $renderRequest->getData()));
     }
 }
