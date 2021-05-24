@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysis\GeneratePeakAnalysisCommand;
-use Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWho\GenerateWhoCommand;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GeneratePeakAnalysis\GeneratePeakAnalysisCommand;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateWho\GenerateWhoCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -12,6 +12,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'transports' => [
                 'sync' => 'sync://',
                 'async' => [
+                    'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
+                    'options' => [
+                        'auto_setup' => false,
+                    ],
+                ],
+                'async_slow' => [
                     'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                     'options' => [
                         'auto_setup' => false,

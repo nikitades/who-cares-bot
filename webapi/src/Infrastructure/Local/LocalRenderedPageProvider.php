@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Local;
 
 use GuzzleHttp\Client;
-use Nikitades\WhoCaresBot\WebApi\App\Command\RenderedPageProviderInterface;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequest;
 use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequestRepositoryInterface;
 use Symfony\Component\Cache\CacheItem;

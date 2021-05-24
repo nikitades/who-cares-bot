@@ -6,7 +6,7 @@ namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\PeakAnalysis;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
-use Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysis\GeneratePeakAnalysisCommand;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GeneratePeakAnalysis\GeneratePeakAnalysisCommand;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomUserCommand;
 
 class PeakAnalysisCommand extends AbstractCustomUserCommand

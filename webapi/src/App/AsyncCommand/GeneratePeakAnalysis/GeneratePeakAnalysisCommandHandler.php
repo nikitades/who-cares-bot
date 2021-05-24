@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysis;
+namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GeneratePeakAnalysis;
 
 use Longman\TelegramBot\Request;
+
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Twig\Environment;
