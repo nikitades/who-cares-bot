@@ -28,17 +28,17 @@ class GenerateWhoCommandHandler implements CommandHandlerInterface
     {
         /** @var WhoCommandResponse $whoCommandResponse */
         $whoCommandResponse = $this->cache->get(
-            sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->daysAmount, 4),
+            sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->daysAmount, 6),
             function (ItemInterface $item) use ($command): WhoCommandResponse {
                 $item->expiresAfter(60);
-                $positions = $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 4);
+                $positions = $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 6);
 
                 return new WhoCommandResponse(
                     $positions,
                     $command->chatId,
                     $this->renderedPageProvider->getRegularTopImage(
                         array_map(
-                            fn (UserPosition $position): string => $position->userNickname,
+                            fn (UserPosition $position): string => sprintf('%s: %s', $position->userNickname, $position->userMessagesCount),
                             $positions
                         ),
                         array_map(

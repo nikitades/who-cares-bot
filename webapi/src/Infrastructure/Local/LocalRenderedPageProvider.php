@@ -10,6 +10,8 @@ use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequest;
 use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequestRepositoryInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Contracts\Cache\CacheInterface;
+
+use function Safe\preg_replace;
 use function Safe\sprintf;
 
 class LocalRenderedPageProvider implements RenderedPageProviderInterface
@@ -27,7 +29,11 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
      */
     public function getRegularTopImage(array $labels, array $positions): string
     {
-        $key = sprintf('render_top_%s_%s', implode(',', $labels), implode(',', $positions));
+        $key = sprintf(
+            'render_top_%s_%s',
+            implode(',', $positions),
+            preg_replace('#[^\d^\w]#', '', implode(',', $labels))
+        );
 
         $imageContent = $this->appCache->get(
             $key,

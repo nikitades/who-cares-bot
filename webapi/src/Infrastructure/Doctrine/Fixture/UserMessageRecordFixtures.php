@@ -14,14 +14,15 @@ class UserMessageRecordFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        for ($k = 0; $k < 5; ++$k) {
-            $chatId = $faker->randomNumber();
+        $chatId = -515375295;
+
+        for ($k = 0; $k < 15; ++$k) {
             $messageId = null;
             for ($n = 0; $n < 25; ++$n) {
                 $replyToMessageId = $messageId;
                 $userId = $faker->randomNumber();
                 $userNickname = $faker->name;
-                $createdAt = $faker->dateTimeBetween('-12 hours');
+                $createdAt = $faker->dateTimeBetween('-1 month');
                 $text = $faker->realText();
                 $textLength = mb_strlen($text);
                 $attachType = 'text';
