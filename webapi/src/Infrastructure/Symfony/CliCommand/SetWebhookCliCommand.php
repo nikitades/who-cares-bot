@@ -23,7 +23,7 @@ class SetWebhookCliCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('webhook:set')
+            ->setName('bot:webhook:set')
             ->setDescription('Set webhook')
             ->addArgument(
                 'webhook',

@@ -8,6 +8,7 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomSystemCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage\RegisterMessageCommand;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\StartThrottledPeakDetection\StartThrottledPeakDetectionCommand;
 
 class GenericMessageCommand extends AbstractCustomSystemCommand
 {
@@ -16,18 +17,18 @@ class GenericMessageCommand extends AbstractCustomSystemCommand
      */
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();
+        $this->dispatch(new StartThrottledPeakDetectionCommand($this->getMessage()->getChat()->getId()));
 
         $this->dispatch(new RegisterMessageCommand(
-            messageId: $message->getMessageId(),
-            replyToMessageId: $message->getReplyToMessage()?->getMessageId(), //@phpstan-ignore-line
-            userId: $message->getFrom()->getId(),
-            userNickname: $message->getFrom()->getUsername(),
-            chatId: $message->getChat()->getId(),
-            timestamp: $message->getDate(),
-            text: $message->getText() ?? '',
-            stickedId: $message->getSticker()?->getFileId(), //@phpstan-ignore-line
-            attachType: $message->getType()
+            messageId: $this->getMessage()->getMessageId(),
+            replyToMessageId: $this->getMessage()->getReplyToMessage()?->getMessageId(), //@phpstan-ignore-line
+            userId: $this->getMessage()->getFrom()->getId(),
+            userNickname: $this->getMessage()->getFrom()->getUsername(),
+            chatId: $this->getMessage()->getChat()->getId(),
+            timestamp: $this->getMessage()->getDate(),
+            text: $this->getMessage()->getText() ?? '',
+            stickedId: $this->getMessage()->getSticker()?->getFileId(), //@phpstan-ignore-line
+            attachType: $this->getMessage()->getType()
         ));
 
         return Request::emptyResponse();

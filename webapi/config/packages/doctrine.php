@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use DoctrineExtensions\Query\Postgresql\DateTrunc;
+use DoctrineExtensions\Query\Postgresql\ExtractFunction;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -17,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
             'auto_mapping' => true,
             'mappings' => [
-                'Nikitades\WhoCaresBot\WebApi\Domain\\' => [
+                'Nikitades\WhoCaresBot' => [
                     'is_bundle' => false,
                     'type' => 'annotation',
                     'dir' => '%kernel.project_dir%/src/Domain',
@@ -25,6 +27,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'alias' => 'Nikitades\WhoCaresBot\WebApi\Domain',
                 ],
             ],
+            'dql' => [
+                'string_functions' => [
+                    'DATE_TRUNC' => DateTrunc::class,
+                    'EXTRACT' => ExtractFunction::class
+                ]
+            ]
         ],
     ]);
 };

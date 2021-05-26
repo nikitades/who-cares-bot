@@ -13,10 +13,20 @@ interface UserMessageRecordRepositoryInterface
     /**
      * @return array<UserPosition>
      */
-    public function findPositionsWithinDays(int $chatId, int $daysAmount, int $topUsersCount): array;
+    public function findPositionsWithinDays(int $chatId, int $withinDays, int $topUsersCount): array;
 
     /**
      * @return array<UserMessageRecord>
      */
-    public function getAllRecordsWithinDays(int $chatId, int $daysAmount): array;
+    public function getAllRecordsWithinDays(int $chatId, int $withinDays): array;
+
+    /**
+     * @return array<MessagesAtTimeCount>
+     */
+    public function getMessagesAggregatedByTime(int $chatId, int $withinDays, int $secondsInterval): array;
+
+    /**
+     * @return array<int>
+     */
+    public function getAliveChatsWithinDays(int $withinDays): array;
 }

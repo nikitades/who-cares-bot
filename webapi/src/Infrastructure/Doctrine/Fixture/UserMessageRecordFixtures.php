@@ -6,10 +6,15 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecord;
-use Symfony\Component\Uid\Uuid;
+use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
+use Safe\DateTime;
 
 class UserMessageRecordFixtures extends Fixture
 {
+    public function __construct(private UuidProviderInterface $uuidProvider)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
@@ -22,7 +27,7 @@ class UserMessageRecordFixtures extends Fixture
                 $replyToMessageId = $messageId;
                 $userId = $faker->randomNumber();
                 $userNickname = $faker->name;
-                $createdAt = $faker->dateTimeBetween('-1 month');
+                $createdAt = DateTime::createFromInterface($faker->dateTimeBetween('-1 month'));
                 $text = $faker->realText();
                 $textLength = mb_strlen($text);
                 $attachType = 'text';
@@ -31,7 +36,7 @@ class UserMessageRecordFixtures extends Fixture
                 for ($m = 0; $m < $faker->numberBetween(30, 50); ++$m) {
                     $messageId = $faker->randomNumber();
                     $manager->persist(new UserMessageRecord(
-                        Uuid::v4(),
+                        $this->uuidProvider->provide(),
                         $messageId,
                         $replyToMessageId,
                         $chatId,

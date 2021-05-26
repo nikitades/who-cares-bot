@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GeneratePeakAnalysis\GeneratePeakAnalysisCommand;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateWho\GenerateWhoCommand;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\AsyncCommandInterface;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatMedian\CalculateChatMedianCommand;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak\DetectPeakCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -25,8 +26,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             ],
             'routing' => [
-                GeneratePeakAnalysisCommand::class => 'async',
-                GenerateWhoCommand::class => 'async',
+                AsyncCommandInterface::class => 'async',
+                CalculateChatMedianCommand::class => 'async_slow',
+                DetectPeakCommand::class => 'async_slow',
             ],
             'default_bus' => 'query.bus',
             'buses' => [
