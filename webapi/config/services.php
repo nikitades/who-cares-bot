@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure()
         ->bind('$commandBus', service('command.bus'))
-        ->bind('$queryBus', service('query.bus'));
+        ->bind('$cachePeriod', '%env(CACHE_PERIOD)%');
 
     $services->instanceof(CommandHandlerInterface::class)
         ->tag('messenger.message_handler', ['bus' => 'command.bus']);

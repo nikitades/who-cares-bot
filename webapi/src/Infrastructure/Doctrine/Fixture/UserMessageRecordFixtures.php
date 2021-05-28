@@ -27,13 +27,12 @@ class UserMessageRecordFixtures extends Fixture
                 $replyToMessageId = $messageId;
                 $userId = $faker->randomNumber();
                 $userNickname = $faker->name;
-                $createdAt = DateTime::createFromInterface($faker->dateTimeBetween('-1 month', '-3 days'));
                 $text = $faker->realText();
                 $textLength = mb_strlen($text);
                 $attachType = 'text';
                 $stickerId = null;
 
-                for ($m = 0; $m < $faker->numberBetween(30, 50); ++$m) {
+                for ($m = 0; $m < $faker->numberBetween(10, 25); ++$m) {
                     $messageId = $faker->randomNumber();
                     $manager->persist(new UserMessageRecord(
                         $this->uuidProvider->provide(),
@@ -42,7 +41,7 @@ class UserMessageRecordFixtures extends Fixture
                         $chatId,
                         $userId,
                         $userNickname,
-                        $createdAt,
+                        DateTime::createFromInterface($faker->dateTimeBetween('-2 month')),
                         $text,
                         $textLength,
                         $attachType,

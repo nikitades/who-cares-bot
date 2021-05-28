@@ -15,6 +15,8 @@ use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepos
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
 
 use Safe\DateTime;
+
+use function Safe\file_put_contents;
 use function Safe\sprintf;
 
 /**
@@ -58,11 +60,11 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
         $dateFrom = (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
 
         $result = $this->createQueryBuilder('r')
-            ->select('COUNT(r.id) as messagesCount, DATE_TRUNC(:interval, r.createdAt) time')->setParameter('interval', sprintf('%s', $interval))
+            ->select('COUNT(r.id) as messagesCount, DATE_TRUNC(:interval, r.createdAt) as time')->setParameter('interval', sprintf('%s', $interval))
             ->where('r.chatId = :chatId')->setParameter('chatId', $chatId)
             ->andWhere('r.createdAt > :dateFrom')->setParameter('dateFrom', $dateFrom)
-            ->orderBy('r.createdAt', Criteria::ASC)
-            ->groupBy('time, r.createdAt')
+            ->groupBy('time')
+            ->orderBy('time', Criteria::ASC)
             ->getQuery()
             ->getScalarResult();
 

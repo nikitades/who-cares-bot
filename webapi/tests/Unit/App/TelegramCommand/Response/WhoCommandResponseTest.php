@@ -34,8 +34,8 @@ class WhoCommandResponseTest extends TestCase
         static::assertEquals([
             'chat_id' => $desiredChatId,
             'parse_mode' => 'Markdown',
-            'caption' => '*someUser1*: 5
-*someUser2*: 7',
+            'caption' => '*@someUser1*: 5
+*@someUser2*: 7',
             'photo' => $result['photo'],
         ], $result);
     }

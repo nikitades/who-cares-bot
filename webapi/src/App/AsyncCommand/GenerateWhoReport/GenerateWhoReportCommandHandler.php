@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateWho;
+namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateWhoReport;
 
 use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
@@ -13,26 +13,29 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use function Safe\sprintf;
 
-class GenerateWhoCommandHandler implements CommandHandlerInterface
+class GenerateWhoReportCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
         private RenderedPageProviderInterface $renderedPageProvider,
-        private CacheInterface $cache
+        private CacheInterface $cache,
+        private int $cachePeriod
     ) {
     }
 
-    public function __invoke(GenerateWhoCommand $command): void
+    public function __invoke(GenerateWhoReportCommand $command): void
     {
+        $topUsersCount = 6;
         /** @var WhoCommandResponse $whoCommandResponse */
         $whoCommandResponse = $this->cache->get(
-            sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->daysAmount, 6),
-            function (ItemInterface $item) use ($command): WhoCommandResponse {
-                $item->expiresAfter(300);
+            sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->withinDays, $topUsersCount),
+            function (ItemInterface $item) use ($command, $topUsersCount): WhoCommandResponse {
+                $item->expiresAfter($this->cachePeriod);
+
                 $positions = $this->userMessageRecordRepository->findPositionsWithinDays(
                     chatId: $command->chatId,
-                    withinHours: $command->daysAmount * 24,
-                    topUsersCount: 6
+                    withinHours: $command->withinDays * 24,
+                    topUsersCount: $topUsersCount
                 );
 
                 return new WhoCommandResponse(

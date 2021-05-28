@@ -11,4 +11,11 @@ interface RenderedPageProviderInterface
      * @param array<int> $positions
      */
     public function getRegularTopImage(array $labels, array $positions): string;
+
+    /**
+     * @param array<string> $labels
+     * @param array<int> $positions
+     * @return string
+     */
+    public function getMedianImage(array $labels, array $positions): string;
 }

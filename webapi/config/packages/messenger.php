@@ -30,7 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 CalculateChatMedianCommand::class => 'async_slow',
                 DetectPeakCommand::class => 'async_slow',
             ],
-            'default_bus' => 'query.bus',
+            'default_bus' => 'command.bus',
             'buses' => [
                 'command.bus' => [
                     'middleware' => [
@@ -38,7 +38,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'doctrine_ping_connection',
                     ],
                 ],
-                'query.bus' => null,
             ],
         ],
     ]);
