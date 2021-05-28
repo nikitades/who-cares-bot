@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\App\TelegramCommand\User\Who;
+namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\App\TelegramCommand\Response;
 
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponse;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\UserPosition;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
+use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
 use PHPUnit\Framework\TestCase;
 
 class WhoCommandResponseTest extends TestCase
@@ -34,8 +34,8 @@ class WhoCommandResponseTest extends TestCase
         static::assertEquals([
             'chat_id' => $desiredChatId,
             'parse_mode' => 'Markdown',
-            'caption' => '**someUser1**: 5
-**someUser2**: 7',
+            'caption' => '*someUser1*: 5
+*someUser2*: 7',
             'photo' => $result['photo'],
         ], $result);
     }

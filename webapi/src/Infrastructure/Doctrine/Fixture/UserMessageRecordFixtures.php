@@ -27,7 +27,7 @@ class UserMessageRecordFixtures extends Fixture
                 $replyToMessageId = $messageId;
                 $userId = $faker->randomNumber();
                 $userNickname = $faker->name;
-                $createdAt = DateTime::createFromInterface($faker->dateTimeBetween('-1 month'));
+                $createdAt = DateTime::createFromInterface($faker->dateTimeBetween('-1 month', '-3 days'));
                 $text = $faker->realText();
                 $textLength = mb_strlen($text);
                 $attachType = 'text';

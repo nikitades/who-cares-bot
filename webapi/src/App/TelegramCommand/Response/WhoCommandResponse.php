@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who;
+namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response;
 
 use Longman\TelegramBot\Request;
 
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\UserPosition;
+use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
+use function Safe\file_put_contents;
 use function Safe\sprintf;
 use function Safe\tempnam;
-use function Safe\file_put_contents;
 
-class WhoCommandResponse
+class WhoCommandResponse implements ResponseInterface
 {
     private string $text;
 
@@ -26,10 +26,15 @@ class WhoCommandResponse
         $this->text = 0 === count($userPositions) ? 'No messages registered!' : implode(
             "\n",
             array_map(
-                fn (UserPosition $userPosition): string => sprintf('**%s**: %s', $userPosition->userNickname, $userPosition->userMessagesCount),
+                fn (UserPosition $userPosition): string => sprintf('*@%s*: %s', $userPosition->userNickname, $userPosition->userMessagesCount),
                 $userPositions
             ),
         );
+    }
+
+    public function process(): void
+    {
+        Request::sendPhoto($this->toSendPhoto());
     }
 
     /**

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateWho;
 
-use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\RenderedPageProviderInterface;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who\WhoCommandResponse;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Query\UserPosition;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use function Safe\sprintf;
@@ -24,14 +22,18 @@ class GenerateWhoCommandHandler implements CommandHandlerInterface
     ) {
     }
 
-    public function __invoke(GenerateWhoCommand $command): ServerResponse
+    public function __invoke(GenerateWhoCommand $command): void
     {
         /** @var WhoCommandResponse $whoCommandResponse */
         $whoCommandResponse = $this->cache->get(
             sprintf('generate_who_command_%s_%s_%s', $command->chatId, $command->daysAmount, 6),
             function (ItemInterface $item) use ($command): WhoCommandResponse {
-                $item->expiresAfter(60);
-                $positions = $this->userMessageRecordRepository->findPositionsWithinDays($command->chatId, $command->daysAmount, 6);
+                $item->expiresAfter(300);
+                $positions = $this->userMessageRecordRepository->findPositionsWithinDays(
+                    chatId: $command->chatId,
+                    withinHours: $command->daysAmount * 24,
+                    topUsersCount: 6
+                );
 
                 return new WhoCommandResponse(
                     $positions,
@@ -50,6 +52,6 @@ class GenerateWhoCommandHandler implements CommandHandlerInterface
             }
         );
 
-        return Request::sendPhoto($whoCommandResponse->toSendPhoto());
+        $whoCommandResponse->process();
     }
 }

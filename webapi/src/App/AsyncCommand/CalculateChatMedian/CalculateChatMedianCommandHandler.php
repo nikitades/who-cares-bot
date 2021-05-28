@@ -12,6 +12,8 @@ use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepos
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
 use Safe\DateTime;
 
+use function Safe\sort;
+
 class CalculateChatMedianCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
@@ -25,12 +27,31 @@ class CalculateChatMedianCommandHandler implements CommandHandlerInterface
     {
         $chatMessagesApproximated = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
             chatId: $command->chatId,
-            withinDays: 30,
-            secondsInterval: 15
+            withinHours: 30 * 24,
+            interval: UserMessageRecordRepositoryInterface::BY_HOUR
         );
 
+        $this->chatMedianRepository->save(
+            new ChatMedian(
+                id: $this->uuidProvider->provide(),
+                chatId: $command->chatId,
+                median: $this->calculateChatMessagesMedianFrequency($chatMessagesApproximated),
+                createdAt: new DateTime('now')
+            )
+        );
+    }
+
+    /**
+     * @param array<MessagesAtTimeCount> $chatMessagesApproximated
+     */
+    private function calculateChatMessagesMedianFrequency(array $chatMessagesApproximated): int
+    {
         if (0 === count($chatMessagesApproximated)) {
-            return;
+            return 0;
+        }
+
+        if (1 === count($chatMessagesApproximated)) {
+            return $chatMessagesApproximated[0]->messagesCount;
         }
 
         /** @var array<int> $plainMessagesCountArray */
@@ -39,15 +60,10 @@ class CalculateChatMedianCommandHandler implements CommandHandlerInterface
             $chatMessagesApproximated
         );
 
-        $medianValue = $plainMessagesCountArray[count($plainMessagesCountArray) - 1];
+        sort($plainMessagesCountArray);
 
-        $this->chatMedianRepository->save(
-            new ChatMedian(
-                id: $this->uuidProvider->provide(),
-                chatId: $command->chatId,
-                median: $medianValue,
-                createdAt: new DateTime('now')
-            )
-        );
+        $medianIndex = (int) round(count($plainMessagesCountArray) / 2) - 1;
+
+        return $plainMessagesCountArray[$medianIndex];
     }
 }

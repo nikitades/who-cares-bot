@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Query\Who;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord;
 
 use JetBrains\PhpStorm\Immutable;
 
 #[Immutable]
-class WhoQuery
+class UserPosition
 {
     public function __construct(
-        public int $chatId,
+        public string $userNickname,
         public int $userId,
-        public int $daysCount
+        public int $userMessagesCount
     ) {
     }
 }
