@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\App\AsyncCommand\CalculateChatMedian;
 
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatMedian\CalculateChatMedianCommand;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatMedian\CalculateChatMedianCommandHandler;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatMedian;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatMedianRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatAverage\CalculateChatAverageCommand;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatAverage\CalculateChatAverageCommandHandler;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverage;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverageRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
@@ -15,7 +15,7 @@ use Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\SymfonyUuidProvider;
 use PHPUnit\Framework\TestCase;
 use Safe\DateTime;
 
-class CalculateChatMedianCommandHandlerTest extends TestCase
+class CalculateChatAverageCommandHandlerTest extends TestCase
 {
     public function testMedianIsCalculatedCorrectly(): void
     {
@@ -48,23 +48,23 @@ class CalculateChatMedianCommandHandlerTest extends TestCase
                 ),
             ]);
 
-        $chatMedianRepository = $this->createMock(ChatMedianRepositoryInterface::class);
+        $chatMedianRepository = $this->createMock(ChatAverageRepositoryInterface::class);
         $chatMedianRepository->expects(static::once())->method('save')
-            ->willReturnCallback(function (ChatMedian $newChatMedian) use ($newChatMedianId): void {
+            ->willReturnCallback(function (ChatAverage $newChatMedian) use ($newChatMedianId): void {
                 static::assertEquals($newChatMedianId, $newChatMedian->getId());
                 static::assertEquals(13, $newChatMedian->getChatId());
-                static::assertEquals(24, $newChatMedian->getMedian());
+                static::assertEquals(24, $newChatMedian->getAverage()); //TODO: update tests to match new average calculation strategy
             });
 
         $uuidProvider = $this->createMock(UuidProviderInterface::class);
         $uuidProvider->expects(static::once())->method('provide')->willReturn($newChatMedianId);
 
-        $calculateChatMedianCommandHandler = new CalculateChatMedianCommandHandler(
+        $calculateChatMedianCommandHandler = new CalculateChatAverageCommandHandler(
             $userMessageRecordRepository,
             $chatMedianRepository,
             $uuidProvider
         );
 
-        $calculateChatMedianCommandHandler->__invoke(new CalculateChatMedianCommand(13));
+        $calculateChatMedianCommandHandler->__invoke(new CalculateChatAverageCommand(13));
     }
 }

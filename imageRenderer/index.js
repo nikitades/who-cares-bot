@@ -14,10 +14,10 @@ const requestListener = async function (req, res) {
         writeImageToClient(res);
     }
 
-    if (req.url.startsWith('/render/median')) {
+    if (req.url.startsWith('/render/activity')) {
         const queryObject = url.parse(req.url, true).query;
         console.log(queryObject);
-        await captureWebsite.file('http://localhost:8080/markup/median/' + queryObject.renderRequest, './file.png', {
+        await captureWebsite.file('http://localhost:8080/markup/activity/' + queryObject.renderRequest, './file.png', {
             width: 800,
             height: 600
         });

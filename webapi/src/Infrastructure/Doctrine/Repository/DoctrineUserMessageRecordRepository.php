@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Repository;
 
 use DateInterval;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,7 +17,6 @@ use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
 
 use Safe\DateTime;
 
-use function Safe\file_put_contents;
 use function Safe\sprintf;
 
 /**
@@ -31,12 +31,10 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
 
     public function getAliveChatsWithinDays(int $withinHours): array
     {
-        $dateFrom = (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
-
         return array_column(
             $this->createQueryBuilder('r')
                 ->select('r.chatId')
-                ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $dateFrom)
+                ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $this->getDateFrom($withinHours))
                 ->groupBy('r.chatId')
                 ->getQuery()
                 ->getScalarResult(),
@@ -57,12 +55,10 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
             throw new LogicException(sprintf('Unknown interval %s', $interval));
         }
 
-        $dateFrom = (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
-
         $result = $this->createQueryBuilder('r')
             ->select('COUNT(r.id) as messagesCount, DATE_TRUNC(:interval, r.createdAt) as time')->setParameter('interval', sprintf('%s', $interval))
             ->where('r.chatId = :chatId')->setParameter('chatId', $chatId)
-            ->andWhere('r.createdAt > :dateFrom')->setParameter('dateFrom', $dateFrom)
+            ->andWhere('r.createdAt > :dateFrom')->setParameter('dateFrom', $this->getDateFrom($withinHours))
             ->groupBy('time')
             ->orderBy('time', Criteria::ASC)
             ->getQuery()
@@ -83,11 +79,9 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
      */
     public function findPositionsWithinDays(int $chatId, int $withinHours, int $topUsersCount): array
     {
-        $dateFrom = (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
-
         $result = $this->createQueryBuilder('r')
             ->select('COUNT(r.id) as totalCount, r.userId, r.userNickname')
-            ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $dateFrom)
+            ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $this->getDateFrom($withinHours))
             ->andWhere('r.chatId = :chatId')->setParameter('chatId', $chatId)
             ->orderBy('totalCount', Criteria::DESC)
             ->groupBy('r.userId, r.userNickname')
@@ -110,10 +104,8 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
      */
     public function getAllRecordsWithinDays(int $chatId, int $withinHours): array
     {
-        $dateFrom = (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
-
         return $this->createQueryBuilder('r')
-            ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $dateFrom)
+            ->where('r.createdAt > :dateFrom')->setParameter('dateFrom', $this->getDateFrom($withinHours))
             ->andWhere('r.chatId = :chatId')->setParameter('chatId', $chatId)
             ->orderBy('r.createdAt', Criteria::ASC)
             ->getQuery()
@@ -124,5 +116,10 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
     {
         $this->getEntityManager()->persist($record);
         $this->getEntityManager()->flush();
+    }
+
+    private function getDateFrom(int $withinHours): DateTimeInterface
+    {
+        return (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
     }
 }

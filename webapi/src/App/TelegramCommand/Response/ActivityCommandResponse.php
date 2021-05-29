@@ -9,7 +9,7 @@ use function Safe\tempnam;
 use function Safe\file_put_contents;
 use function Safe\sprintf;
 
-class MedianCommandResponse implements ResponseInterface
+class ActivityCommandResponse implements ResponseInterface
 {
     public function __construct(
         private int $chatId,

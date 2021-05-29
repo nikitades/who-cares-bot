@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateMedianReport;
+namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateActivityReport;
 
 use JetBrains\PhpStorm\Immutable;
 use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\AsyncCommandInterface;
 
 #[Immutable]
-class GenerateMedianReportCommand implements AsyncCommandInterface
+class GenerateActivityReportCommand implements AsyncCommandInterface
 {
     public function __construct(
         public int $chatId,

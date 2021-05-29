@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak;
 
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakDetectionResponse;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatMedianRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverageRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
@@ -14,15 +14,15 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
-        private ChatMedianRepositoryInterface $chatMedianRepository
+        private ChatAverageRepositoryInterface $chatAverageRepository
     ) {
     }
 
     public function __invoke(DetectPeakCommand $command): void
     {
-        $chatMedian = $this->chatMedianRepository->findByChatId($command->chatId);
+        $chatAverage = $this->chatAverageRepository->findByChatId($command->chatId);
 
-        if (null === $chatMedian) {
+        if (null === $chatAverage) {
             return;
         }
 
@@ -38,7 +38,7 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
             0
         );
 
-        $peakValue = round($messagesCount / $chatMedian->getMedian()); //we take the median value as 1st level of activity
+        $peakValue = round($messagesCount / $chatAverage->getAverage()); //we take the average value as 1st level of activity
 
         (new PeakDetectionResponse($command->chatId, (int) $peakValue))->process();
     }

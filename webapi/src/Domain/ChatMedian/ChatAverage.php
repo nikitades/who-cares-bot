@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @Entity
  */
-class ChatMedian
+class ChatAverage
 {
     /**
      * @Id
@@ -29,7 +29,7 @@ class ChatMedian
     /**
      * @Column(type="integer")
      */
-    private int $median;
+    private int $average;
 
     /**
      * @Column(type="datetime")
@@ -39,12 +39,12 @@ class ChatMedian
     public function __construct(
         Uuid $id,
         int $chatId,
-        int $median,
+        int $average,
         DateTimeInterface $createdAt
     ) {
         $this->id = $id;
         $this->chatId = $chatId;
-        $this->median = $median;
+        $this->average = $average;
         $this->createdAt = $createdAt;
     }
 
@@ -58,9 +58,9 @@ class ChatMedian
         return $this->chatId;
     }
 
-    public function getMedian(): int
+    public function getAverage(): int
     {
-        return $this->median;
+        return $this->average;
     }
 
     public function getCreatedAt(): DateTimeInterface

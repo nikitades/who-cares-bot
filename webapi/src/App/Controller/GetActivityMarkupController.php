@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
-final class GetMedianMarkupController
+final class GetActivityMarkupController
 {
     public function __construct(
         private Environment $twigEnvironment,
@@ -20,7 +20,7 @@ final class GetMedianMarkupController
     ) {
     }
 
-    #[Route(path: '/markup/median/{renderRequestId}', methods: ['GET'])]
+    #[Route(path: '/markup/activity/{renderRequestId}', methods: ['GET'])]
     public function __invoke(string $renderRequestId): Response
     {
         $renderRequest = $this->renderRequestRepository->findById($renderRequestId);
@@ -30,6 +30,6 @@ final class GetMedianMarkupController
             throw new Exception('No render request found by key ' . $renderRequestId);
         }
 
-        return new Response($this->twigEnvironment->render('median.twig', $renderRequest->getData()));
+        return new Response($this->twigEnvironment->render('activity.twig', $renderRequest->getData()));
     }
 }

@@ -58,10 +58,10 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
         return $imageContent;
     }
 
-    public function getMedianImage(array $labels, array $positions): string
+    public function getActivityImage(array $labels, array $positions): string
     {
         $key = sprintf(
-            'render_median_%s_%s',
+            'render_activity_%s_%s',
             implode(',', $positions),
             preg_replace('#[^\d^\w]#', '', implode(',', $labels))
         );
@@ -79,7 +79,7 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
                 $this->renderRequestRepository->saveOrUpdate($renderRequest);
 
                 return $this->client
-                    ->get(sprintf('/render/median?renderRequest=%s', $renderRequest->getKey()), $renderRequest->getData())
+                    ->get(sprintf('/render/activity?renderRequest=%s', $renderRequest->getKey()), $renderRequest->getData())
                     ->getBody()
                     ->getContents();
             }

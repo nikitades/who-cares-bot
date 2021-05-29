@@ -17,5 +17,5 @@ interface RenderedPageProviderInterface
      * @param array<int> $positions
      * @return string
      */
-    public function getMedianImage(array $labels, array $positions): string;
+    public function getActivityImage(array $labels, array $positions): string;
 }

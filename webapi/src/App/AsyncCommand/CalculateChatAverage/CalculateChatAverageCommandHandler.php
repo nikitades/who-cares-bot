@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatMedian;
+namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatAverage;
 
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatMedian;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatMedianRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverage;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverageRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
@@ -14,28 +14,28 @@ use Safe\DateTime;
 
 use function Safe\sort;
 
-class CalculateChatMedianCommandHandler implements CommandHandlerInterface
+class CalculateChatAverageCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
-        private ChatMedianRepositoryInterface $chatMedianRepository,
+        private ChatAverageRepositoryInterface $chatMedianRepository,
         private UuidProviderInterface $uuidProvider
     ) {
     }
 
-    public function __invoke(CalculateChatMedianCommand $command): void
+    public function __invoke(CalculateChatAverageCommand $command): void
     {
         $chatMessagesApproximated = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
             chatId: $command->chatId,
-            withinHours: 30 * 24,
+            withinHours: 24,
             interval: UserMessageRecordRepositoryInterface::BY_HOUR
         );
 
         $this->chatMedianRepository->save(
-            new ChatMedian(
+            new ChatAverage(
                 id: $this->uuidProvider->provide(),
                 chatId: $command->chatId,
-                median: $this->calculateChatMessagesMedianFrequency($chatMessagesApproximated),
+                average: $this->calculateChatMessagesMedianFrequency($chatMessagesApproximated),
                 createdAt: new DateTime('now')
             )
         );
@@ -53,6 +53,11 @@ class CalculateChatMedianCommandHandler implements CommandHandlerInterface
         if (1 === count($chatMessagesApproximated)) {
             return $chatMessagesApproximated[0]->messagesCount;
         }
+
+        $chatMessagesApproximated = array_filter(
+            $chatMessagesApproximated,
+            fn (MessagesAtTimeCount $record): bool => $record->messagesCount > 0
+        );
 
         /** @var array<int> $plainMessagesCountArray */
         $plainMessagesCountArray = array_map(
