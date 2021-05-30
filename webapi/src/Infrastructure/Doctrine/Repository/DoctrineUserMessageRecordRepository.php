@@ -45,7 +45,7 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
     /**
      * @return array<MessagesAtTimeCount>
      */
-    public function getMessagesAggregatedByTime(int $chatId, int $withinHours, string $interval): array
+    public function getMessagesAggregatedByTime(int $chatId, int $withinHours, int $exceptHours, string $interval): array
     {
         if (!in_array(
             $interval,
@@ -59,6 +59,7 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
             ->select('COUNT(r.id) as messagesCount, DATE_TRUNC(:interval, r.createdAt) as time')->setParameter('interval', sprintf('%s', $interval))
             ->where('r.chatId = :chatId')->setParameter('chatId', $chatId)
             ->andWhere('r.createdAt > :dateFrom')->setParameter('dateFrom', $this->getDateFrom($withinHours))
+            ->andWhere('r.createdAt <= :dateUntil')->setParameter('dateUntil', $this->getDateFrom($exceptHours))
             ->groupBy('time')
             ->orderBy('time', Criteria::ASC)
             ->getQuery()

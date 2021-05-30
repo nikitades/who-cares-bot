@@ -6,7 +6,7 @@ namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\User\Who;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateWhoReport\GenerateWhoReportCommand;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateWhoReport\GenerateWhoReportCommand;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomUserCommand;
 
 class WhoMonthCommand extends AbstractCustomUserCommand

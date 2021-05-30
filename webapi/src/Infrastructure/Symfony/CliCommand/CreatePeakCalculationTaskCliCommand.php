@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\CliCommand;
 
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak\CalculateChatPeakCommand;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

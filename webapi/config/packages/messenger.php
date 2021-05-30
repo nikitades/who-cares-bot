@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\AsyncCommandInterface;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak\CalculateChatPeakCommand;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\AsyncCommandInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak\DetectPeakCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

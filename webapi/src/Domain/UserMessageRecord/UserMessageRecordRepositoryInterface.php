@@ -24,7 +24,7 @@ interface UserMessageRecordRepositoryInterface
     /**
      * @return array<MessagesAtTimeCount>
      */
-    public function getMessagesAggregatedByTime(int $chatId, int $withinHours, string $interval): array;
+    public function getMessagesAggregatedByTime(int $chatId, int $withinHours, int $exceptHours, string $interval): array;
 
     public function ensureMessagesOlderThanExist(int $chatId, int $olderThanHours): bool;
 

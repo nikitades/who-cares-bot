@@ -37,6 +37,7 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
         $lastHourMessages = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
             chatId: $command->chatId,
             withinHours: 1,
+            exceptHours: 0,
             interval: UserMessageRecordRepositoryInterface::BY_HOUR
         );
 

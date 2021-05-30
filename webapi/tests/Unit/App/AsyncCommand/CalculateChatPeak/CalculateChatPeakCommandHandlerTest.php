@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\App\AsyncCommand\CalculateChatPeak;
+namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\Domain\Command\CalculateChatPeak;
 
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak\CalculateChatPeakCommand;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak\CalculateChatPeakCommandHandler;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommand;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommandHandler;
 use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeak;
 use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
@@ -24,7 +24,7 @@ class CalculateChatPeakCommandHandlerTest extends TestCase
         $userMessageRecordRepository = $this->createMock(UserMessageRecordRepositoryInterface::class);
         $userMessageRecordRepository->expects(static::once())
             ->method('getMessagesAggregatedByTime')
-            ->with(chatId: 13, withinHours: 720, interval: UserMessageRecordRepositoryInterface::BY_HOUR)
+            ->with(chatId: 13, withinHours: 720, exceptHours: 24, interval: UserMessageRecordRepositoryInterface::BY_HOUR)
             ->willReturn([
                 new MessagesAtTimeCount(
                     13,
@@ -62,7 +62,8 @@ class CalculateChatPeakCommandHandlerTest extends TestCase
         $calculateChatPeakCommandHandler = new CalculateChatPeakCommandHandler(
             $userMessageRecordRepository,
             $chatPeakRepository,
-            $uuidProvider
+            $uuidProvider,
+            720
         );
 
         $calculateChatPeakCommandHandler->__invoke(new CalculateChatPeakCommand(13));

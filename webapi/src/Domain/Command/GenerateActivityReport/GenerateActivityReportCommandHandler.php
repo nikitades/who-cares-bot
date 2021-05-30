@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateActivityReport;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateActivityReport;
 
 use DateInterval;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\RenderedPageProviderInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\ActivityCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
@@ -39,6 +39,7 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
                 $lastMessages = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
                     $command->chatId,
                     ($command->withinDays * 24) - 1,
+                    0,
                     UserMessageRecordRepositoryInterface::BY_HOUR
                 );
 

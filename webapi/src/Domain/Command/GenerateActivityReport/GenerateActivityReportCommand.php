@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\GenerateActivityReport;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateActivityReport;
 
 use JetBrains\PhpStorm\Immutable;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\AsyncCommandInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\AsyncCommandInterface;
 
 #[Immutable]
 class GenerateActivityReportCommand implements AsyncCommandInterface

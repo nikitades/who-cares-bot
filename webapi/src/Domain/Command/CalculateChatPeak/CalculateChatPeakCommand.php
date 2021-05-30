@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak;
 
 use JetBrains\PhpStorm\Immutable;
 
