@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\AsyncCommandInterface;
-use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatAverage\CalculateChatAverageCommand;
+use Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak\CalculateChatPeakCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak\DetectPeakCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -27,7 +27,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
             'routing' => [
                 AsyncCommandInterface::class => 'async',
-                CalculateChatAverageCommand::class => 'async_slow',
+                CalculateChatPeakCommand::class => 'async_slow',
                 DetectPeakCommand::class => 'async_slow',
             ],
             'default_bus' => 'command.bus',

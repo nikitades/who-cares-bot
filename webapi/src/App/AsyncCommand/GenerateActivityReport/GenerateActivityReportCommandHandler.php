@@ -30,8 +30,8 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
 
     public function __invoke(GenerateActivityReportCommand $command): void
     {
-        /** @var ActivityCommandResponse|null $averageCommandResponse */
-        $averageCommandResponse = $this->cache->get(
+        /** @var ActivityCommandResponse|null $activityCommandResponse */
+        $activityCommandResponse = $this->cache->get(
             sprintf('generate_activity_report_command_%s_%s', $command->chatId, $command->withinDays),
             function (ItemInterface $item) use ($command): ActivityCommandResponse {
                 $item->expiresAfter($this->cachePeriod);
@@ -73,10 +73,10 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
             }
         );
 
-        if (null === $averageCommandResponse) {
+        if (null === $activityCommandResponse) {
             return;
         }
 
-        $averageCommandResponse->process();
+        $activityCommandResponse->process();
     }
 }

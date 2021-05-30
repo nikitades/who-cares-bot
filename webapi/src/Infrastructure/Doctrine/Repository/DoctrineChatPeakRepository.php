@@ -7,20 +7,20 @@ namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverage;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian\ChatAverageRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeak;
+use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeakRepositoryInterface;
 
 /**
- * @extends ServiceEntityRepository<ChatAverage>
+ * @extends ServiceEntityRepository<ChatPeak>
  */
-class DoctrineChatAverageRepository extends ServiceEntityRepository implements ChatAverageRepositoryInterface
+class DoctrineChatPeakRepository extends ServiceEntityRepository implements ChatPeakRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ChatAverage::class);
+        parent::__construct($registry, ChatPeak::class);
     }
 
-    public function findByChatId(int $chatId): ?ChatAverage
+    public function findByChatId(int $chatId): ?ChatPeak
     {
         return $this->createQueryBuilder('m')
             ->where('m.chatId = :chatId')->setParameter('chatId', $chatId)
@@ -30,9 +30,9 @@ class DoctrineChatAverageRepository extends ServiceEntityRepository implements C
             ->getOneOrNullResult();
     }
 
-    public function save(ChatAverage $median): void
+    public function save(ChatPeak $peak): void
     {
-        $this->getEntityManager()->persist($median);
+        $this->getEntityManager()->persist($peak);
         $this->getEntityManager()->flush();
     }
 }

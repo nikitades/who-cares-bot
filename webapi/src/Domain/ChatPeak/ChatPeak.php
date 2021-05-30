@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\ChatMedian;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping\Column;
@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @Entity
  */
-class ChatAverage
+class ChatPeak
 {
     /**
      * @Id
@@ -29,7 +29,12 @@ class ChatAverage
     /**
      * @Column(type="integer")
      */
-    private int $average;
+    private int $peak;
+
+    /**
+     * @Column(type="datetime")
+     */
+    private DateTimeInterface $peakDate;
 
     /**
      * @Column(type="datetime")
@@ -39,12 +44,14 @@ class ChatAverage
     public function __construct(
         Uuid $id,
         int $chatId,
-        int $average,
+        int $peak,
+        DateTimeInterface $peakDate,
         DateTimeInterface $createdAt
     ) {
         $this->id = $id;
         $this->chatId = $chatId;
-        $this->average = $average;
+        $this->peak = $peak;
+        $this->peakDate = $peakDate;
         $this->createdAt = $createdAt;
     }
 
@@ -58,9 +65,14 @@ class ChatAverage
         return $this->chatId;
     }
 
-    public function getAverage(): int
+    public function getPeak(): int
     {
-        return $this->average;
+        return $this->peak;
+    }
+
+    public function getPeakDate(): DateTimeInterface
+    {
+        return $this->peakDate;
     }
 
     public function getCreatedAt(): DateTimeInterface

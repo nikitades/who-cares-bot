@@ -77,6 +77,19 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
     /**
      * {@inheritDoc}
      */
+    public function ensureMessagesOlderThanExist(int $chatId, int $olderThanHours): bool
+    {
+        return [] !== $this->createQueryBuilder('r')
+            ->select('r.id')
+            ->where('r.createdAt < :dateTo')->setParameter('dateTo', $this->getDateFrom($olderThanHours))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getScalarResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function findPositionsWithinDays(int $chatId, int $withinHours, int $topUsersCount): array
     {
         $result = $this->createQueryBuilder('r')

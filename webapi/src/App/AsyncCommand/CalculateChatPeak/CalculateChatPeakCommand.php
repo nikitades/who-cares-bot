@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatAverage;
+namespace Nikitades\WhoCaresBot\WebApi\App\AsyncCommand\CalculateChatPeak;
 
 use JetBrains\PhpStorm\Immutable;
 
 #[Immutable]
-class CalculateChatAverageCommand
+class CalculateChatPeakCommand
 {
     public function __construct(public int $chatId)
     {

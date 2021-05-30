@@ -20,37 +20,64 @@ class UserMessageRecordFixtures extends Fixture
         $faker = Factory::create();
 
         $chatId = -515375295;
+        $messageId = null;
 
-        for ($k = 0; $k < 15; ++$k) {
-            $messageId = null;
-            for ($n = 0; $n < 25; ++$n) {
-                $replyToMessageId = $messageId;
-                $userId = $faker->randomNumber();
-                $userNickname = $faker->name;
-                $text = $faker->realText();
-                $textLength = mb_strlen($text);
-                $attachType = 'text';
-                $stickerId = null;
-
-                for ($m = 0; $m < $faker->numberBetween(10, 25); ++$m) {
-                    $messageId = $faker->randomNumber();
-                    $manager->persist(new UserMessageRecord(
+        for ($n = 0; $n < 500; ++$n) {
+            $replyToMessageId = $messageId;
+            $userId = $faker->randomNumber();
+            $userNickname = $faker->name;
+            $text = $faker->realText();
+            $textLength = mb_strlen($text);
+            $attachType = 'text';
+            $stickerId = null;
+            $date = DateTime::createFromInterface($faker->dateTimeBetween('-15 day'));
+            for ($m = 0; $m < $faker->numberBetween(10, 25); ++$m) {
+                $messageId = $faker->randomNumber();
+                $manager->persist(new UserMessageRecord(
                         $this->uuidProvider->provide(),
                         $messageId,
                         $replyToMessageId,
                         $chatId,
                         $userId,
                         $userNickname,
-                        DateTime::createFromInterface($faker->dateTimeBetween('-2 month')),
+                        $date,
                         $text,
                         $textLength,
                         $attachType,
                         $stickerId
                     ));
-                }
-
-                $manager->flush();
             }
+
+            $manager->flush();
+        }
+
+        for ($n = 0; $n < 6; ++$n) {
+            $replyToMessageId = $messageId;
+            $userId = $faker->randomNumber();
+            $userNickname = $faker->name;
+            $text = $faker->realText();
+            $textLength = mb_strlen($text);
+            $attachType = 'text';
+            $stickerId = null;
+
+            for ($m = 0; $m < $faker->numberBetween(75, 150); ++$m) {
+                $messageId = $faker->randomNumber();
+                $manager->persist(new UserMessageRecord(
+                    $this->uuidProvider->provide(),
+                    $messageId,
+                    $replyToMessageId,
+                    $chatId,
+                    $userId,
+                    $userNickname,
+                    DateTime::createFromInterface($faker->dateTimeBetween('-12 hour')),
+                    $text,
+                    $textLength,
+                    $attachType,
+                    $stickerId
+                ));
+            }
+
+            $manager->flush();
         }
     }
 }
