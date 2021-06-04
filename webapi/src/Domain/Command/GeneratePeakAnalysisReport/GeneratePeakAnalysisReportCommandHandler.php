@@ -31,7 +31,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             chatId: $command->chatId,
             withinHours: $command->withinDays * 24,
             offsetHours: 0,
-            interval: UserMessageRecordRepositoryInterface::BY_MINUTE
+            interval: UserMessageRecordRepositoryInterface::BY_HOUR
         );
 
         if ([] === $messagesAggregated) {
@@ -70,7 +70,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
                     chatId: $command->chatId,
                     withinHours: $command->withinDays * 24 * 2,
                     offsetHours: $command->withinDays * 24,
-                    interval: UserMessageRecordRepositoryInterface::BY_MINUTE
+                    interval: UserMessageRecordRepositoryInterface::BY_HOUR
                 )
             );
         }
@@ -94,9 +94,9 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             messages: $recordsIncludingStartMessageRough
         );
 
-        if (null === $targetMessage) {
-            throw new Exception('Message was not found!');
-        }
+        // if (null === $targetMessage) {
+        //     throw new Exception('Message was not found!');
+        // }
 
         $messagesWithinPeakOnly = $this->getMessagesGroupWithinDates(
             messages: $recordsIncludingStartMessageRough,
@@ -107,19 +107,21 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         $peakAnalysisReport = new PeakAnalysisReport(
             messagesCount: count($messagesWithinPeakOnly),
             timeLength: $peakStart->diff($peakEnd),
-            averageFrequencyPerMinute: count($messagesWithinPeakOnly) / $peakStart->diff($peakEnd)->m,
+            averageFrequencyPerMinute: (float) (count($messagesWithinPeakOnly) / ($peakStart->diff($peakEnd)->h * 60 + $peakStart->diff($peakEnd)->m)),
+            peakFrequencyPerMinute: $peak->messagesCount / 60,
             mostActivePersonName: $this->getMostActivePersonName($messagesWithinPeakOnly)
         );
 
         $text = 'All started here ^^^
-Peak length: ' . (($peakAnalysisReport->timeLength->h * 60 + $peakAnalysisReport->timeLength->i) / 60) . ' minutes
-Average frequency per minute: ' . $peakAnalysisReport->averageFrequencyPerMinute . '
+Peak length: ' . (float) (($peakAnalysisReport->timeLength->h * 60 + $peakAnalysisReport->timeLength->i) / 60) . ' hours
+Average frequency per minute: ' . substr((string) $peakAnalysisReport->averageFrequencyPerMinute, 0, 3) . '
+Peak frequency per minute: ' . substr((string) $peakAnalysisReport->peakFrequencyPerMinute, 0, 3) . '
 The most active person: @' . $peakAnalysisReport->mostActivePersonName;
 
         Request::sendMessage([
             'chat_id' => $command->chatId,
             'text' => $text,
-            'reply_to_message_id' => $targetMessage->getMessageId(),
+            'reply_to_message_id' => $targetMessage?->getMessageId() ?? 123,
         ]);
     }
 
@@ -149,6 +151,8 @@ The most active person: @' . $peakAnalysisReport->mostActivePersonName;
             $period
         );
 
+        sort($periodSum);
+
         $periodMedian = $periodSum[count($periodSum) / 2 - 1];
 
         $peakHasStarted = false;
@@ -177,6 +181,8 @@ The most active person: @' . $peakAnalysisReport->mostActivePersonName;
             $period
         );
 
+        sort($periodSum);
+
         $periodMedian = $periodSum[count($periodSum) / 2 - 1];
 
         $peakHasStarted = false;
@@ -191,7 +197,7 @@ The most active person: @' . $peakAnalysisReport->mostActivePersonName;
             }
         }
 
-        return null;
+        return $period[count($period) - 1]->time;
     }
 
     /**
