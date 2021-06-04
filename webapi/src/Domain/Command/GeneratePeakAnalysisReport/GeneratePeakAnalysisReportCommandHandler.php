@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\Domain\Command\GeneratePeakAnalysisReport;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GeneratePeakAnalysisReport;
 
 use DateTimeInterface;
 use Exception;
 use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\GeneratePeakAnalysisReport\GeneratePeakAnalysisReportCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
@@ -39,17 +38,6 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             return;
         }
 
-        /**
-         * 1. Найти пик среди сообщений
-         * 2. Если пик ниже чем половина прошлого, то ответ отрицательный
-         * 3. Идти влево от пика, чтобы найти, где линия касается медианы по выборке
-         * 4. Если найдено, то публикуем инфу:
-         *      - спайк длиной n
-         *      - длительностью n
-         *      - средняя частота n
-         *      - самый активный n
-         * 5. Если так и не коснулось, то запрос предыдущего куска, и поиск по нему со старыми данными.
-         */
         $peak = $this->findPeakWithin(period: $messagesAggregated);
 
         $historicalPeak = $this->chatPeakRepository->findLastByChatId($command->chatId);
