@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\AsyncCommandInterface;
+use Nikitades\WhoCaresBot\WebApi\App\Command\AsyncCommandInterface;
+use Nikitades\WhoCaresBot\WebApi\App\Command\DetectPeak\DetectPeakCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommand;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak\DetectPeakCommand;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
