@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
 use DateTimeInterface;
-use Exception;
-use Longman\TelegramBot\Request;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakAnalysisResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
@@ -16,7 +15,6 @@ use Safe\DateTime;
 use Twig\Environment;
 use function Safe\krsort;
 use function Safe\sort;
-use function Safe\substr;
 
 class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterface
 {
@@ -95,17 +93,15 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             messages: $recordsIncludingStartMessageRough
         );
 
-        // if (null === $targetMessage) {
-        //     throw new Exception('Message was not found!');
-        // }
-
         $messagesWithinPeakOnly = $this->getMessagesGroupWithinDates(
             messages: $recordsIncludingStartMessageRough,
             firstDate: $peakStart,
             lastDate: $peakEnd
         );
 
-        $peakAnalysisReport = new PeakAnalysisReport(
+        $peakAnalysisReportResponse = new PeakAnalysisResponse(
+            chatId: $command->chatId,
+            initialMessageId: $targetMessage?->getMessageId() ?? 0,
             messagesCount: count($messagesWithinPeakOnly),
             timeLength: $peakStart->diff($peakEnd),
             averageFrequencyPerMinute: (float) (count($messagesWithinPeakOnly) / ($peakStart->diff($peakEnd)->h * 60 + $peakStart->diff($peakEnd)->m)),
@@ -113,17 +109,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             mostActivePersonName: $this->getMostActivePersonName($messagesWithinPeakOnly)
         );
 
-        $text = 'All started here ^^^
-Peak length: ' . (float) (($peakAnalysisReport->timeLength->h * 60 + $peakAnalysisReport->timeLength->i) / 60) . ' hours
-Average frequency per minute: ' . substr((string) $peakAnalysisReport->averageFrequencyPerMinute, 0, 3) . '
-Peak frequency per minute: ' . substr((string) $peakAnalysisReport->peakFrequencyPerMinute, 0, 3) . '
-The most active person: @' . $peakAnalysisReport->mostActivePersonName;
-
-        Request::sendMessage([
-            'chat_id' => $command->chatId,
-            'text' => $text,
-            'reply_to_message_id' => $targetMessage?->getMessageId() ?? 123,
-        ]);
+        $peakAnalysisReportResponse->process();
     }
 
     /**
