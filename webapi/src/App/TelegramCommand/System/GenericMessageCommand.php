@@ -8,7 +8,7 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomSystemCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage\RegisterMessageCommand;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\StartThrottledPeakDetection\StartThrottledPeakDetectionCommand;
+use Nikitades\WhoCaresBot\WebApi\App\Command\StartThrottledPeakDetection\StartThrottledPeakDetectionCommand;
 
 class GenericMessageCommand extends AbstractCustomSystemCommand
 {

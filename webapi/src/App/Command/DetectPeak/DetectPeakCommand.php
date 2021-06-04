@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\StartThrottledPeakDetection;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\DetectPeak;
 
 use JetBrains\PhpStorm\Immutable;
 
 #[Immutable]
-class StartThrottledPeakDetectionCommand
+class DetectPeakCommand
 {
     public function __construct(public int $chatId)
     {

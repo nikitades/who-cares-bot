@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GeneratePeakAnalysisReport;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
 use DateInterval;
 use JetBrains\PhpStorm\Immutable;

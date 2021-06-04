@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain;
+namespace Nikitades\WhoCaresBot\WebApi\App;
 
 interface RenderedPageProviderInterface
 {

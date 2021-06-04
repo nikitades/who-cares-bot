@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GeneratePeakAnalysisReport;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
 use DateTimeInterface;
 use Exception;
 use Longman\TelegramBot\Request;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Safe\DateTime;
 use Twig\Environment;
 use function Safe\krsort;
+use function Safe\sort;
+use function Safe\substr;
 
 class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterface
 {
@@ -50,7 +52,6 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         if ($peak->messagesCount < $historicalPeak->getPeak() / 2) {
             //TODO: ответить что не удается выявить явные пики в текущий момент
             return;
-            //TODO: получить статистический пик по чату, сравнить текущий пик со статистическим, больше ли он половины от статистического пика
         }
 
         $peakStart = $this->findPeakStart(
@@ -75,7 +76,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             );
         }
 
-        if (null === $peakStart || null === $peakEnd) {
+        if (null === $peakStart) {
             //TODO: Ответ что при поиске начала пика что-то пошло не так
             return;
         }
@@ -173,7 +174,7 @@ The most active person: @' . $peakAnalysisReport->mostActivePersonName;
     /**
      * @param array<MessagesAtTimeCount> $period
      */
-    private function findPeakEnd(MessagesAtTimeCount $peak, array $period): ?DateTimeInterface
+    private function findPeakEnd(MessagesAtTimeCount $peak, array $period): DateTimeInterface
     {
         /** @var array<int> $periodSum */
         $periodSum = array_map(

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\StartThrottledPeakDetection;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\StartThrottledPeakDetection;
 
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak\DetectPeakCommand;
+use Nikitades\WhoCaresBot\WebApi\App\Command\DetectPeak\DetectPeakCommand;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\DetectPeak;
 
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakDetectionResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;

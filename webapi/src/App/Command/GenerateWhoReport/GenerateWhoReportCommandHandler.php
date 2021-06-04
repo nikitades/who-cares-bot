@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateWhoReport;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWhoReport;
 
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderedPageProviderInterface;
+use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;

@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateActivityReport;
+namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateActivityReport;
 
 use DateInterval;
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderedPageProviderInterface;
+use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\ActivityCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Safe\DateTime;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-
 use function Safe\ksort;
 use function Safe\sprintf;
 
