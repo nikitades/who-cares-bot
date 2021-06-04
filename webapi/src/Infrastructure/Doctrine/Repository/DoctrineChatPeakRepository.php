@@ -7,8 +7,8 @@ namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeak;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeakRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeak;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 
 /**
  * @extends ServiceEntityRepository<ChatPeak>
@@ -20,7 +20,7 @@ class DoctrineChatPeakRepository extends ServiceEntityRepository implements Chat
         parent::__construct($registry, ChatPeak::class);
     }
 
-    public function findByChatId(int $chatId): ?ChatPeak
+    public function findLastByChatId(int $chatId): ?ChatPeak
     {
         return $this->createQueryBuilder('m')
             ->where('m.chatId = :chatId')->setParameter('chatId', $chatId)

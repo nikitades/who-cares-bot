@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest;
 
 interface RenderRequestRepositoryInterface
 {

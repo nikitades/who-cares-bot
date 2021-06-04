@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -104,5 +104,20 @@ class UserMessageRecord
         $this->textLength = $textLength;
         $this->attachType = $attachType;
         $this->stickerId = $stickerId;
+    }
+
+    public function getMessageId(): int
+    {
+        return $this->messageId;
+    }
+
+    public function getCreatedAt(): DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUserNickname(): string
+    {
+        return $this->userNickname;
     }
 }

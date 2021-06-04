@@ -6,6 +6,7 @@ namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\System;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
+use Nikitades\WhoCaresBot\Domain\Command\SimpleDimple\SimpleDimpleCommand;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\AbstractCustomSystemCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage\RegisterMessageCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\StartThrottledPeakDetection\StartThrottledPeakDetectionCommand;
@@ -30,6 +31,8 @@ class GenericMessageCommand extends AbstractCustomSystemCommand
             stickedId: $this->getMessage()->getSticker()?->getFileId(), //@phpstan-ignore-line
             attachType: $this->getMessage()->getType()
         ));
+
+        $this->dispatch(new SimpleDimpleCommand());
 
         return Request::emptyResponse();
     }

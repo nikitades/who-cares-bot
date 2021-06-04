@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\RegisterMessage;
 
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecord;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
 use Safe\DateTime;
 

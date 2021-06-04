@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping\Column;

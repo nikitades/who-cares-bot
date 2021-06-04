@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\DetectPeak;
 
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakDetectionResponse;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeakRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 
 class DetectPeakCommandHandler implements CommandHandlerInterface
 {
@@ -21,7 +21,7 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
 
     public function __invoke(DetectPeakCommand $command): void
     {
-        $chatPeak = $this->chatPeakRepository->findByChatId($command->chatId);
+        $chatPeak = $this->chatPeakRepository->findLastByChatId($command->chatId);
 
         if (null === $chatPeak) {
             return;
@@ -37,7 +37,7 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
         $lastHourMessages = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
             chatId: $command->chatId,
             withinHours: 1,
-            exceptHours: 0,
+            offsetHours: 0,
             interval: UserMessageRecordRepositoryInterface::BY_HOUR
         );
 

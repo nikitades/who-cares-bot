@@ -6,10 +6,10 @@ namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\Domain\Command\CalculateChatPea
 
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommand;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak\CalculateChatPeakCommandHandler;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeak;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeakRepositoryInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeak;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\SymfonyUuidProvider;
 use PHPUnit\Framework\TestCase;

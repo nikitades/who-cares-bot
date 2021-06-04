@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\CalculateChatPeak;
 
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeak;
-use Nikitades\WhoCaresBot\WebApi\Domain\ChatPeak\ChatPeakRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeak;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\MessagesAtTimeCount;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
 use Safe\DateTime;
 
@@ -27,7 +27,7 @@ class CalculateChatPeakCommandHandler implements CommandHandlerInterface
         $chatMessagesApproximated = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
             chatId: $command->chatId,
             withinHours: $this->peakSearchPeriod,
-            exceptHours: 24,
+            offsetHours: 24,
             interval: UserMessageRecordRepositoryInterface::BY_HOUR
         );
 

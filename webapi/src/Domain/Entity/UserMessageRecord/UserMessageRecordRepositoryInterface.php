@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord;
 
 interface UserMessageRecordRepositoryInterface
 {
@@ -14,22 +14,22 @@ interface UserMessageRecordRepositoryInterface
     /**
      * @return array<UserPosition>
      */
-    public function findPositionsWithinDays(int $chatId, int $withinHours, int $topUsersCount): array;
+    public function findPositionsWithinHours(int $chatId, int $withinHours, int $topUsersCount): array;
 
     /**
      * @return array<UserMessageRecord>
      */
-    public function getAllRecordsWithinDays(int $chatId, int $withinHours): array;
+    public function getAllRecordsWithinHours(int $chatId, int $withinHours, int $offsetHours = 0): array;
 
     /**
      * @return array<MessagesAtTimeCount>
      */
-    public function getMessagesAggregatedByTime(int $chatId, int $withinHours, int $exceptHours, string $interval): array;
+    public function getMessagesAggregatedByTime(int $chatId, int $withinHours, int $offsetHours, string $interval): array;
 
     public function ensureMessagesOlderThanExist(int $chatId, int $olderThanHours): bool;
 
     /**
      * @return array<int>
      */
-    public function getAliveChatsWithinDays(int $withinHours): array;
+    public function getAliveChatsWithinHours(int $withinHours): array;
 }

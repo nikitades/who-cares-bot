@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord;
+namespace Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord;
 
 use JetBrains\PhpStorm\Immutable;
 

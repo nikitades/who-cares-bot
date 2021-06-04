@@ -7,8 +7,8 @@ namespace Nikitades\WhoCaresBot\WebApi\Domain\Command\GenerateWhoReport;
 use Nikitades\WhoCaresBot\WebApi\Domain\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecordRepositoryInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserPosition;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use function Safe\sprintf;
@@ -32,7 +32,7 @@ class GenerateWhoReportCommandHandler implements CommandHandlerInterface
             function (ItemInterface $item) use ($command, $topUsersCount): WhoCommandResponse {
                 $item->expiresAfter($this->cachePeriod);
 
-                $positions = $this->userMessageRecordRepository->findPositionsWithinDays(
+                $positions = $this->userMessageRecordRepository->findPositionsWithinHours(
                     chatId: $command->chatId,
                     withinHours: $command->withinDays * 24,
                     topUsersCount: $topUsersCount

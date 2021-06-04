@@ -5,7 +5,7 @@ namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Fixture;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserMessageRecord;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;
 use Nikitades\WhoCaresBot\WebApi\Domain\UuidProviderInterface;
 use Safe\DateTime;
 
@@ -69,7 +69,7 @@ class UserMessageRecordFixtures extends Fixture
                     $chatId,
                     $userId,
                     $userNickname,
-                    DateTime::createFromInterface($faker->dateTimeBetween('-12 hour')),
+                    DateTime::createFromInterface($faker->dateTimeBetween('-12 hour', '-3 hour')),
                     $text,
                     $textLength,
                     $attachType,

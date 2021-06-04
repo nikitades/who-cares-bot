@@ -6,8 +6,8 @@ namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequest;
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequestRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequest;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequestRepositoryInterface;
 
 /**
  * @extends ServiceEntityRepository<RenderRequest>

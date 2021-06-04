@@ -6,7 +6,7 @@ namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response;
 
 use Longman\TelegramBot\Request;
 
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserPosition;
 use function Safe\file_put_contents;
 use function Safe\sprintf;
 use function Safe\tempnam;

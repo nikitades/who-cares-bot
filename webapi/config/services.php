@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Client;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseRendererInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Local\LocalRenderedPageProvider;
@@ -23,9 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->instanceof(CommandHandlerInterface::class)
         ->tag('messenger.message_handler', ['bus' => 'command.bus']);
-
-    $services->instanceof(ResponseRendererInterface::class)
-        ->tag('messenger.message_handler', ['bus' => 'message.renderer.bus']);
 
     $services->load('Nikitades\WhoCaresBot\WebApi\\', __DIR__ . '/../src/')
         ->exclude([
@@ -51,7 +47,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('local.node.httpClient', Client::class)
         ->arg('$config', [
-            'base_uri' => 'http://localhost:9000'
+            'base_uri' => 'http://localhost:9000',
         ]);
 
     $services->set(LocalRenderedPageProvider::class)

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Test\Unit\App\TelegramCommand\Response;
 
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
-use Nikitades\WhoCaresBot\WebApi\Domain\UserMessageRecord\UserPosition;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserPosition;
 use PHPUnit\Framework\TestCase;
 
 class WhoCommandResponseTest extends TestCase

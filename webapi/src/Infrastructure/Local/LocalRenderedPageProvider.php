@@ -6,8 +6,8 @@ namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Local;
 
 use GuzzleHttp\Client;
 use Nikitades\WhoCaresBot\WebApi\Domain\RenderedPageProviderInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequest;
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequestRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequest;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequestRepositoryInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Contracts\Cache\CacheInterface;
 use function Safe\preg_replace;

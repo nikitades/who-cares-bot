@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\App\Controller;
 
 use Exception;
-use Nikitades\WhoCaresBot\WebApi\Domain\RenderRequest\RenderRequestRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequestRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
