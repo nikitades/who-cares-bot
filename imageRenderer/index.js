@@ -1,28 +1,19 @@
 import captureWebsite from 'capture-website';
 import http from 'http';
-import fs, { write } from 'fs';
-import url from 'url';
+import fs from 'fs';
+
+const env = process.env.NODE_ENV || 'local';
+const appAddress = process.env.MAIN_APP_ADDRESS || 'http://localhost:8080';
 
 const requestListener = async function (req, res) {
-    if (req.url.startsWith('/render/top')) {
-        const queryObject = url.parse(req.url, true).query;
-        console.log(queryObject);
-        await captureWebsite.file('http://localhost:8080/markup/top/' + queryObject.renderRequest, './file.png', {
-            width: 800,
-            height: 600
-        });
-        writeImageToClient(res);
-    }
-
-    if (req.url.startsWith('/render/activity')) {
-        const queryObject = url.parse(req.url, true).query;
-        console.log(queryObject);
-        await captureWebsite.file('http://localhost:8080/markup/activity/' + queryObject.renderRequest, './file.png', {
-            width: 800,
-            height: 600
-        });
-        writeImageToClient(res);
-    }
+    await captureWebsite.file(appAddress + req.url, './file.png', {
+        width: 800,
+        height: 600,
+        launchOptions: {
+            args: ['--no-sandbox']
+        }
+    });
+    writeImageToClient(res);
 }
 
 function writeImageToClient(res) {
@@ -39,8 +30,10 @@ function writeImageToClient(res) {
     });
 }
 
+const rendererAddres = env === 'local' ? { port: 9000, host: '0.0.0.0' } : { port: 80, host: '0.0.0.0' };
+
 const server = http.createServer(requestListener);
 server.on('listening', () => {
-    console.log('Started on 0.0.0.0:9000');
+    console.log('Started on ' + rendererAddres.host + ':' + rendererAddres.port);
 });
-server.listen(9000, '0.0.0.0');
+server.listen(rendererAddres.port, rendererAddres.host);

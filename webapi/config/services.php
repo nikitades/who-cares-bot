@@ -47,7 +47,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('local.node.httpClient', Client::class)
         ->arg('$config', [
-            'base_uri' => 'http://localhost:9000',
+            'base_uri' => '%env(IMAGE_RENDERER_ADDRESS)%',
         ]);
 
     $services->set(LocalRenderedPageProvider::class)

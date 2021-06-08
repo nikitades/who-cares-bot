@@ -13,8 +13,7 @@ use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageReco
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Safe\DateTime;
 use Twig\Environment;
-use function Safe\krsort;
-use function Safe\sort;
+use function Safe\arsort;
 
 class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterface
 {
@@ -140,7 +139,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
 
         sort($periodSum);
 
-        $periodMedian = $periodSum[count($periodSum) / 2 - 1];
+        $periodMedian = $periodSum[count($periodSum) / 2 - 1] * 0.5;
 
         $peakHasStarted = false;
         for ($i = count($period) - 1; $i > 0; --$i) {
@@ -170,7 +169,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
 
         sort($periodSum);
 
-        $periodMedian = $periodSum[count($periodSum) / 2 - 1];
+        $periodMedian = $periodSum[count($periodSum) / 2 - 1] * 0.5;
 
         $peakHasStarted = false;
         for ($i = 0; $i < count($period); ++$i) {
@@ -234,11 +233,8 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             ++$counter[$message->getUserNickname()];
         }
 
-        krsort($counter);
+        arsort($counter);
 
-        /** @var array<string> $keys */
-        $keys = array_keys($counter);
-
-        return $keys[0];
+        return array_keys($counter)[0];
     }
 }

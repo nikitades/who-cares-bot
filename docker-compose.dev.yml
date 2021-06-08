@@ -1,0 +1,65 @@
+version: "3"
+services:
+  app_webapi:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile
+    image: nikitades/whocaresbot-app-webapi
+    restart: always
+    depends_on:
+      - app_maintenance
+      - database
+  app_consumer_regular:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile.consumer.regular
+    image: nikitades/whocaresbot-app-consumer
+    restart: always
+    depends_on:
+      - app_maintenance
+      - database
+  app_consumer_slow:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile.consumer.slow
+    image: nikitades/whocaresbot-app-consumer-slow
+    restart: always
+    depends_on:
+      - app_maintenance
+      - database
+  app_maintenance:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile.maintenance
+    image: nikitades/whocaresbot-app-maintenance
+    depends_on:
+      - database
+  nginx:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile.nginx
+    image: nikitades/whocaresbot-nginx
+    ports:
+      - 8080:80
+    volumes:
+      - ./webapi/var/nginx/log:/var/log/nginx
+    depends_on:
+      - app_webapi
+    restart: always
+  imagerenderer:
+    build:
+      context: ./imageRenderer
+    image: nikitades/whocaresbot-imagerenderer
+    restart: always
+    environment:
+      NODE_ENV: development
+  database:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: whocaresbot
+      POSTGRES_PASSWORD: whocaresbot
+    volumes:
+      - ./webapi/docker/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    ports:
+      - 5433:5432

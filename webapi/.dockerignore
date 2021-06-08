@@ -1,0 +1,4 @@
+vendor
+php-cs-fixer-rules
+tests
+var

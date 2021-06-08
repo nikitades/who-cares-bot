@@ -48,7 +48,7 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
                 $this->renderRequestRepository->saveOrUpdate($renderRequest);
 
                 return $this->client
-                    ->get(sprintf('/render/top?renderRequest=%s', $renderRequest->getKey()), $renderRequest->getData())
+                    ->get(sprintf('/markup/top/%s', $renderRequest->getKey()), $renderRequest->getData())
                     ->getBody()
                     ->getContents();
             }
@@ -78,7 +78,7 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
                 $this->renderRequestRepository->saveOrUpdate($renderRequest);
 
                 return $this->client
-                    ->get(sprintf('/render/activity?renderRequest=%s', $renderRequest->getKey()), $renderRequest->getData())
+                    ->get(sprintf('/markup/activity/%s', $renderRequest->getKey()), $renderRequest->getData())
                     ->getBody()
                     ->getContents();
             }
