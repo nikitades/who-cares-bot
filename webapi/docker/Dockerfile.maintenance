@@ -6,11 +6,12 @@ RUN docker-php-ext-install pdo pdo_pgsql
 COPY . /app
 WORKDIR /app
 
-RUN chmod +x ./docker/migrations_entrypoint.sh
+RUN chmod +x ./docker/entrypoint_migrations.sh
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install
 
-RUN composer dump-env prod --empty
+RUN bin/console cache:warmup
+RUN composer dump-env prod
 
-ENTRYPOINT ["./docker/migrations_entrypoint.sh"]
+ENTRYPOINT ["./docker/entrypoint_migrations.sh"]

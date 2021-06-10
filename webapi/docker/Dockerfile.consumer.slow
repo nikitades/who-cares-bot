@@ -9,6 +9,8 @@ WORKDIR /app
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install
 
-RUN composer dump-env prod --empty
+RUN bin/console cache:warmup
+
+RUN composer dump-env prod
 
 ENTRYPOINT ["bin/console", "messenger:consume", "async_slow"]
