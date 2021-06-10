@@ -22,7 +22,7 @@ class ChatPeak
     private Uuid $id;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private int $chatId;
 
