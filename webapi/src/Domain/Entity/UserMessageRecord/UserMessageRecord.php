@@ -31,22 +31,22 @@ class UserMessageRecord
     private Uuid $id;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private int $messageId;
 
     /**
-     * @Column(type="integer", nullable=true)
+     * @Column(type="bigint", nullable=true)
      */
     private ?int $replyToMessageId;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private int $chatId;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private int $userId;
 
