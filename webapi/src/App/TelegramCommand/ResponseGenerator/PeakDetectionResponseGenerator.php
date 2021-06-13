@@ -2,43 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response;
+namespace Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator;
 
 use Longman\TelegramBot\Request;
 
-class PeakDetectionResponse implements ResponseInterface
+class PeakDetectionResponseGenerator implements ResponseGeneratorInterface
 {
-    public function __construct(
-        private int $chatId,
-        private int $peakValue
-    ) {
-    }
-
-    public function process(): void
-    {
-        $text = $this->getText();
+    public function process(
+        int $chatId,
+        int $peakValue
+    ): void {
+        $text = $this->getText($peakValue);
         if (null === $text) {
             return;
         }
 
-        Request::sendMessage($this->toMessage($text));
-    }
-
-    /**
-     * @return array<string,int|string>
-     */
-    public function toMessage(string $text): array
-    {
-        return [
-            'chat_id' => $this->chatId,
+        Request::sendMessage([
+            'chat_id' => $chatId,
             'text' => $text,
             'parse_mode' => 'Markdown',
-        ];
+        ]);
     }
 
-    private function getText(): ?string
+    private function getText(int $peakValue): ?string
     {
-        switch ($this->peakValue) {
+        switch ($peakValue) {
             case 0:
             case 1:
             case 2:

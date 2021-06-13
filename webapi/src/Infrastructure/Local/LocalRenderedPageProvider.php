@@ -24,8 +24,7 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
     }
 
     /**
-     * @param array<string> $labels
-     * @param array<int> $positions
+     * {@inheritDoc}
      */
     public function getRegularTopImage(array $labels, array $positions): string
     {
@@ -35,7 +34,7 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
             preg_replace('#[^\d^\w]#', '', implode(',', $labels))
         );
 
-        $imageContent = $this->appCache->get(
+        return $this->appCache->get(
             $key,
             function (CacheItem $cacheItem) use ($labels, $positions, $key): string {
                 $cacheItem->expiresAfter($this->cachePeriod);
@@ -47,16 +46,21 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
 
                 $this->renderRequestRepository->saveOrUpdate($renderRequest);
 
-                return $this->client
+                $image = $this->client
                     ->get(sprintf('/markup/top/%s', $renderRequest->getKey()), $renderRequest->getData())
                     ->getBody()
                     ->getContents();
+
+                $this->renderRequestRepository->delete($key);
+
+                return $image;
             }
         );
-
-        return $imageContent;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getActivityImage(array $labels, array $positions): string
     {
         $key = sprintf(
@@ -65,7 +69,7 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
             preg_replace('#[^\d^\w]#', '', implode(',', $labels))
         );
 
-        $imageContent = $this->appCache->get(
+        return $this->appCache->get(
             $key,
             function (CacheItem $cacheItem) use ($labels, $positions, $key): string {
                 $cacheItem->expiresAfter($this->cachePeriod);
@@ -77,13 +81,50 @@ class LocalRenderedPageProvider implements RenderedPageProviderInterface
 
                 $this->renderRequestRepository->saveOrUpdate($renderRequest);
 
-                return $this->client
+                $image = $this->client
                     ->get(sprintf('/markup/activity/%s', $renderRequest->getKey()), $renderRequest->getData())
                     ->getBody()
                     ->getContents();
+
+                $this->renderRequestRepository->delete($key);
+
+                return $image;
             }
         );
+    }
 
-        return $imageContent;
+    /**
+     * {@inheritDoc}
+     */
+    public function getPeakLogImage(array $labels, array $positions): string
+    {
+        $key = sprintf(
+            'peak_log_%s_%s',
+            implode(',', $positions),
+            preg_replace('#[^\d^\w]#', '', implode(',', $labels))
+        );
+
+        return $this->appCache->get(
+            $key,
+            function (CacheItem $cacheItem) use ($labels, $positions, $key): string {
+                $cacheItem->expiresAfter($this->cachePeriod);
+
+                $renderRequest = new RenderRequest(
+                    $key,
+                    ['labels' => $labels, 'data' => $positions]
+                );
+
+                $this->renderRequestRepository->saveOrUpdate($renderRequest);
+
+                $image = $this->client
+                    ->get(sprintf('/markup/peakAnalysis/%s', $renderRequest->getKey()), $renderRequest->getData())
+                    ->getBody()
+                    ->getContents();
+
+                $this->renderRequestRepository->delete($key);
+
+                return $image;
+            }
+        );
     }
 }

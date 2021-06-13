@@ -37,4 +37,13 @@ class DoctrineRenderRequestRepository extends ServiceEntityRepository implements
     {
         return parent::find($id);
     }
+
+    public function delete(string $key): void
+    {
+        $this->createQueryBuilder('rr')
+            ->delete()
+            ->where('rr.key = :key')->setParameter('key', $key)
+            ->getQuery()
+            ->execute();
+    }
 }

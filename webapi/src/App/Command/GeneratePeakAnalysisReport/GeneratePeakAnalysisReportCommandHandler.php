@@ -6,7 +6,9 @@ namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
 use DateTimeInterface;
 use LogicException;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakAnalysisResponse;
+use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakAnalysis\NegativePeakAnalysisResponseGenerator;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakAnalysis\PositivePeakAnalysisResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
@@ -22,7 +24,10 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
         private ChatPeakRepositoryInterface $chatPeakRepository,
-        private Environment $twigEnvironment
+        private Environment $twigEnvironment,
+        private RenderedPageProviderInterface $renderedPageProvider,
+        private NegativePeakAnalysisResponseGenerator $negativePeakAnalysisResponseGenerator,
+        private PositivePeakAnalysisResponseGenerator $positivePeakAnalysisResponseGenerator
     ) {
     }
 
@@ -36,6 +41,11 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         );
 
         if ([] === $messagesAggregated) {
+            $this->negativePeakAnalysisResponseGenerator->process(
+                $command->chatId,
+                NegativePeakAnalysisResponseGenerator::REASON_NOT_ENOUGH_DATA_COLLECTED
+            );
+
             return;
         }
 
@@ -44,12 +54,20 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         $historicalPeak = $this->chatPeakRepository->findLastByChatId($command->chatId);
 
         if (null === $historicalPeak) {
-            //TODO: ответить что недостаточно истории чата
+            $this->negativePeakAnalysisResponseGenerator->process(
+                $command->chatId,
+                NegativePeakAnalysisResponseGenerator::REASON_NOT_ENOUGH_DATA_COLLECTED
+            );
+
             return;
         }
 
         if ($peak->messagesCount < $historicalPeak->getPeak() / 2) {
-            //TODO: ответить что не удается выявить явные пики в текущий момент
+            $this->negativePeakAnalysisResponseGenerator->process(
+                $command->chatId,
+                NegativePeakAnalysisResponseGenerator::REASON_NO_PEAKS_DETECTED
+            );
+
             return;
         }
 
@@ -76,7 +94,11 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         }
 
         if (null === $peakStart) {
-            //TODO: Ответ что при поиске начала пика что-то пошло не так
+            $this->negativePeakAnalysisResponseGenerator->process(
+                $command->chatId,
+                NegativePeakAnalysisResponseGenerator::REASON_NO_PEAKS_DETECTED
+            );
+
             return;
         }
 
@@ -90,6 +112,11 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         );
 
         if (0 === count($recordsIncludingStartMessageRough)) {
+            $this->negativePeakAnalysisResponseGenerator->process(
+                $command->chatId,
+                NegativePeakAnalysisResponseGenerator::REASON_NOT_ENOUGH_DATA_COLLECTED
+            );
+
             return;
         }
 
@@ -104,17 +131,22 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             lastDate: $peakEnd
         );
 
-        $peakAnalysisReportResponse = new PeakAnalysisResponse(
+        $labels = [];
+        $positions = [];
+
+        $this->positivePeakAnalysisResponseGenerator->process(
             chatId: $command->chatId,
             initialMessageId: $targetMessage?->getMessageId() ?? 0,
             messagesCount: count($messagesWithinPeakOnly),
             timeLength: $peakStart->diff($peakEnd),
             averageFrequencyPerMinute: (float) (count($messagesWithinPeakOnly) / ($peakStart->diff($peakEnd)->h * 60 + $peakStart->diff($peakEnd)->m)),
             peakFrequencyPerMinute: $peak->messagesCount / 60,
-            mostActivePersonName: $this->getMostActivePersonName($messagesWithinPeakOnly)
+            mostActivePersonName: $this->getMostActivePersonName($messagesWithinPeakOnly),
+            imageContent: $this->renderedPageProvider->getPeakLogImage(
+                labels: $labels,
+                positions: $positions
+            )
         );
-
-        $peakAnalysisReportResponse->process();
     }
 
     /**

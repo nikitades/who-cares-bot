@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\DetectPeak;
 
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakDetectionResponse;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakDetectionResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
@@ -15,6 +15,7 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
         private ChatPeakRepositoryInterface $chatPeakRepository,
+        private PeakDetectionResponseGenerator $peakDetectionResponseGenerator,
         private int $peakSearchPeriod
     ) {
     }
@@ -49,6 +50,6 @@ class DetectPeakCommandHandler implements CommandHandlerInterface
 
         $peakValue = floor($messagesCount / $chatPeak->getPeak() * 8); //we take the peak value as 10th level of activity, but stimulate the chat to be more active by using only 8 as multiplier
 
-        (new PeakDetectionResponse($command->chatId, (int) $peakValue))->process();
+        $this->peakDetectionResponseGenerator->process($command->chatId, (int) $peakValue);
     }
 }

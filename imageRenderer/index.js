@@ -6,6 +6,7 @@ const env = process.env.NODE_ENV || 'local';
 const appAddress = process.env.MAIN_APP_ADDRESS || 'http://localhost:8080';
 
 const requestListener = async function (req, res) {
+    console.log('requesting ' + appAddress + req.url);
     await captureWebsite.file(appAddress + req.url, './file.png', {
         width: 800,
         height: 600,

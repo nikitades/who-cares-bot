@@ -9,4 +9,6 @@ interface RenderRequestRepositoryInterface
     public function saveOrUpdate(RenderRequest $renderRequest): void;
 
     public function findById(string $id): ?RenderRequest;
+
+    public function delete(string $key): void;
 }

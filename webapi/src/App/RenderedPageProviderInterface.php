@@ -15,7 +15,12 @@ interface RenderedPageProviderInterface
     /**
      * @param array<string> $labels
      * @param array<int> $positions
-     * @return string
      */
     public function getActivityImage(array $labels, array $positions): string;
+
+    /**
+     * @param array<string> $labels
+     * @param array<int> $positions
+     */
+    public function getPeakLogImage(array $labels, array $positions): string;
 }

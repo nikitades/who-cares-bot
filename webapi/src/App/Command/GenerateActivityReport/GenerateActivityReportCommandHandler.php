@@ -6,7 +6,8 @@ namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateActivityReport;
 
 use DateInterval;
 use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\ActivityCommandResponse;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponse;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Safe\DateTime;
@@ -23,16 +24,17 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
         private RenderedPageProviderInterface $renderedPageProvider,
         private CacheInterface $cache,
+        private ActivityResponseGenerator $activityResponseGenerator,
         private int $cachePeriod
     ) {
     }
 
     public function __invoke(GenerateActivityReportCommand $command): void
     {
-        /** @var ActivityCommandResponse|null $activityCommandResponse */
-        $activityCommandResponse = $this->cache->get(
+        /** @var ActivityResponse|null $activityResponse */
+        $activityResponse = $this->cache->get(
             sprintf('generate_activity_report_command_%s_%s', $command->chatId, $command->withinDays),
-            function (ItemInterface $item) use ($command): ActivityCommandResponse {
+            function (ItemInterface $item) use ($command): ActivityResponse {
                 $item->expiresAfter($this->cachePeriod);
 
                 $lastMessages = $this->userMessageRecordRepository->getMessagesAggregatedByTime(
@@ -62,7 +64,7 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
                 );
                 $positions = array_values($realChronologicPositionsMap);
 
-                return new ActivityCommandResponse(
+                return new ActivityResponse(
                     chatId: $command->chatId,
                     peakValue: array_reduce($positions, fn (int $carry, int $count) => $carry = $count > $carry ? $count : $carry, 0),
                     imageContent: $this->renderedPageProvider->getActivityImage(
@@ -73,10 +75,10 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
             }
         );
 
-        if (null === $activityCommandResponse) {
+        if (null === $activityResponse) {
             return;
         }
 
-        $activityCommandResponse->process();
+        $this->activityResponseGenerator->process($activityResponse);
     }
 }

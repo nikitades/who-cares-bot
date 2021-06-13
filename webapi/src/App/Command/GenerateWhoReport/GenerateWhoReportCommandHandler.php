@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWhoReport;
 
 use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\WhoCommandResponse;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Who\WhoCommandResponse;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Who\WhoCommandResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserPosition;
@@ -19,6 +20,7 @@ class GenerateWhoReportCommandHandler implements CommandHandlerInterface
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
         private RenderedPageProviderInterface $renderedPageProvider,
         private CacheInterface $cache,
+        private WhoCommandResponseGenerator $whoCommandResponseGenerator,
         private int $cachePeriod
     ) {
     }
@@ -55,6 +57,6 @@ class GenerateWhoReportCommandHandler implements CommandHandlerInterface
             }
         );
 
-        $whoCommandResponse->process();
+        $this->whoCommandResponseGenerator->process($whoCommandResponse);
     }
 }
