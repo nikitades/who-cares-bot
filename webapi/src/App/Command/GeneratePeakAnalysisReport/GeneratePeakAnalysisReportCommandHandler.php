@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
 use DateTimeInterface;
+use LogicException;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\Response\PeakAnalysisResponse;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
@@ -14,6 +15,7 @@ use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageReco
 use Safe\DateTime;
 use Twig\Environment;
 use function Safe\arsort;
+use function Safe\sort;
 
 class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterface
 {
@@ -86,6 +88,10 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             withinHours: $hoursIntervalToPeakStart,
             offsetHours: $hoursIntervalToPeakEnd
         );
+
+        if (0 === count($recordsIncludingStartMessageRough)) {
+            return;
+        }
 
         $targetMessage = $this->findFirstMessageNearTimestamp(
             timestamp: $peakStart,
@@ -222,6 +228,10 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
      */
     private function getMostActivePersonName(array $messages): string
     {
+        if (0 === count($messages)) {
+            throw new LogicException('Empty array given');
+        }
+
         /** @var array<string,int> */
         $counter = [];
 
@@ -235,6 +245,9 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
 
         arsort($counter);
 
-        return array_keys($counter)[0];
+        /** @var array<string> */
+        $keys = array_keys($counter);
+
+        return $keys[0];
     }
 }
