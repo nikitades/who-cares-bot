@@ -5,6 +5,18 @@ services:
       context: ./webapi
       dockerfile: docker/Dockerfile
     image: nikitades/whocaresbot-app-webapi
+    environment:
+      APP_ENV: local
+      REDIS_DSN: redis://redis:6379
+      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
+      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
+      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
+      BOT_NAME: whocaresbot
+      CACHE_PERIOD: 5
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
     depends_on:
       - app_maintenance
@@ -15,26 +27,84 @@ services:
       context: ./webapi
       dockerfile: docker/Dockerfile.consumer.regular
     image: nikitades/whocaresbot-app-consumer
+    environment:
+      APP_ENV: local
+      REDIS_DSN: redis://redis:6379
+      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
+      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
+      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
+      BOT_NAME: whocaresbot
+      CACHE_PERIOD: 5
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
     depends_on:
       - app_maintenance
       - database
       - redis
+    command: ["bin/console", "messenger:consume", "async", "-vv"]
   app_consumer_slow:
     build:
       context: ./webapi
       dockerfile: docker/Dockerfile.consumer.slow
     image: nikitades/whocaresbot-app-consumer-slow
+    environment:
+      APP_ENV: local
+      REDIS_DSN: redis://redis:6379
+      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
+      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
+      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
+      BOT_NAME: whocaresbot
+      CACHE_PERIOD: 5
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
     depends_on:
       - app_maintenance
       - database
       - redis
+    command: ["bin/console", "messenger:consume", "async_slow", "-vv"]
   app_maintenance:
     build:
       context: ./webapi
       dockerfile: docker/Dockerfile.maintenance
     image: nikitades/whocaresbot-app-maintenance
+    environment:
+      APP_ENV: local
+      REDIS_DSN: redis://redis:6379
+      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
+      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
+      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
+      BOT_NAME: whocaresbot
+      CACHE_PERIOD: 5
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
+    depends_on:
+      - database
+      - redis
+  app_scheduler:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile.scheduler
+    image: nikitades/whocaresbot-app-scheduler
+    environment:
+      APP_ENV: local
+      REDIS_DSN: redis://redis:6379
+      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
+      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
+      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
+      BOT_NAME: whocaresbot
+      CACHE_PERIOD: 5
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     depends_on:
       - database
       - redis

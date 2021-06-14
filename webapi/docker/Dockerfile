@@ -7,11 +7,8 @@ RUN pecl install -o -f redis &&  rm -rf /tmp/pear &&  docker-php-ext-enable redi
 COPY . /app
 WORKDIR /app
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install
-
-RUN composer dump-env prod
-
-RUN bin/console cache:warmup
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer install \
+    && bin/console cache:warmup
 
 CMD ["php-fpm"]

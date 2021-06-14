@@ -77,8 +77,22 @@ services:
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
+  app_scheduler:
+    image: nikitades/whocaresbot-app-scheduler
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: postgresql://dbuser:dbpwd@dbhost:5432/dbhost?serverVersion=13&charset=utf8
+      REDIS_DSN: redis://redis:6379
+      APP_SECRET: somesecret
+      BOT_TOKEN: sometoken
+      BOT_NAME: chatanalyticsbot
+      CACHE_PERIOD: 300
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     volumes:
-      - ./logs:/app/var/log
+      - ./logs/cron/cron.log:/var/log/cron.log
     depends_on:
       - database
       - redis

@@ -5,11 +5,15 @@ RUN docker-php-ext-install pdo pdo_pgsql
 RUN pecl install -o -f redis &&  rm -rf /tmp/pear &&  docker-php-ext-enable redis
 
 COPY . /app
+COPY docker/crontab /etc/cron.d/crontab
+
 WORKDIR /app
 
-RUN chmod +x ./docker/entrypoint_migrations.sh \
+RUN chmod 0644 /etc/cron.d/crontab \
+    && crontab /etc/cron.d/crontab \
+    && touch /var/log/cron.log \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install \
     && bin/console cache:warmup
 
-ENTRYPOINT ["./docker/entrypoint_migrations.sh"]
+CMD ["crond", "-f"]
