@@ -12,4 +12,4 @@ RUN chmod +x ./docker/entrypoint_migrations.sh \
     && composer install \
     && bin/console cache:warmup
 
-ENTRYPOINT ["./docker/entrypoint_migrations.sh"]
+CMD ["sh", "./docker/entrypoint_migrations.sh"]
