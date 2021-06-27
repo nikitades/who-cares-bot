@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
+use DateInterval;
 use DateTimeInterface;
 use LogicException;
 use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakAnalysis\NegativePeakAnalysisResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakAnalysis\PositivePeakAnalysisResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeak;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;
@@ -102,8 +104,8 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             return;
         }
 
-        $hoursIntervalToPeakStart = (new DateTime('now'))->diff($peakStart)->h + 1;
-        $hoursIntervalToPeakEnd = (new DateTime('now'))->diff($peakEnd)->h - 1;
+        $hoursIntervalToPeakStart = (new DateTime('now'))->diff($peakStart)->d * 24 + (new DateTime('now'))->diff($peakStart)->h + 1;
+        $hoursIntervalToPeakEnd = (new DateTime('now'))->diff($peakEnd)->d * 24 + (new DateTime('now'))->diff($peakEnd)->h - 1;
 
         $recordsIncludingStartMessageRough = $this->userMessageRecordRepository->getAllRecordsWithinHours(
             chatId: $command->chatId,
@@ -177,18 +179,25 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
 
         sort($periodSum);
 
-        $periodMedian = $periodSum[count($periodSum) / 2 - 1] * 0.5;
+        $periodMedian = $periodSum[count($periodSum) / 2 - 1];
 
         $peakHasStarted = false;
+        $lastMessagesGroup = null;
         for ($i = count($period) - 1; $i > 0; --$i) {
             $currentMessagesGroup = $period[$i];
             if (!$peakHasStarted && $currentMessagesGroup->time <= $peak->time) {
                 $peakHasStarted = true;
             }
 
-            if ($peakHasStarted && $currentMessagesGroup->messagesCount <= $periodMedian) {
-                return $currentMessagesGroup->time;
+            if ($peakHasStarted && ($currentMessagesGroup->messagesCount <= $periodMedian)) {
+                if (null === $lastMessagesGroup) {
+                    return $currentMessagesGroup->time;
+                }
+
+                return $lastMessagesGroup->time->sub(new DateInterval('PT1H'));
             }
+
+            $lastMessagesGroup = $currentMessagesGroup;
         }
 
         return null;

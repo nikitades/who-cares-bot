@@ -1,1 +1,3 @@
-0 0/4 * * * /app/bin/console bot:cron:calculatePeak
+1 */4 * * * echo "Launching calculatePeak command..."
+1 */4 * * * /app/bin/console bot:cron:calculatePeak
+*/1 * * * * echo "Ping"

@@ -58,6 +58,11 @@ class UserMessageRecord
     /**
      * @Column(type="datetime")
      */
+    private DateTimeInterface $messageTime;
+
+    /**
+     * @Column(type="datetime")
+     */
     private DateTimeInterface $createdAt;
 
     /**
@@ -87,6 +92,7 @@ class UserMessageRecord
         int $chatId,
         int $userId,
         string $userNickname,
+        DateTimeInterface $messageTime,
         DateTimeInterface $createdAt,
         ?string $text,
         int $textLength,

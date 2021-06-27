@@ -11,4 +11,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
     && composer install \
     && bin/console cache:warmup
 
-CMD ["bin/console", "messenger:consume", "async_slow"]
+CMD ["bin/console", "messenger:consume", "async_slow", "-vv"]
