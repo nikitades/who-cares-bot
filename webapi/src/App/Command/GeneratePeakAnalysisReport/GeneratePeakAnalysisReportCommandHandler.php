@@ -11,7 +11,6 @@ use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakAnalysis\NegativePeakAnalysisResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\PeakAnalysis\PositivePeakAnalysisResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeak;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\ChatPeak\ChatPeakRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;

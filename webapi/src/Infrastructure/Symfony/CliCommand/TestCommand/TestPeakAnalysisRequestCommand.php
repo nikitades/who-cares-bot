@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Symfony\CliCommand\TestCommand;
 
+use InvalidArgumentException;
 use Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport\GeneratePeakAnalysisReportCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,9 +38,15 @@ class TestPeakAnalysisRequestCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $chatId = $input->getArgument('chatId');
+        $withinDays = $input->getArgument('daysPeriod');
+        if (!is_string($chatId) || !is_string($withinDays)) {
+            throw new InvalidArgumentException('Wrong parameters given');
+        }
+
         $this->commandBus->dispatch(new GeneratePeakAnalysisReportCommand(
-            chatId: (int) $input->getArgument('chatId'),
-            withinDays: (int) $input->getArgument('daysPeriod')
+            chatId: (int) $chatId,
+            withinDays: (int) $withinDays
         ));
 
         return Command::SUCCESS;

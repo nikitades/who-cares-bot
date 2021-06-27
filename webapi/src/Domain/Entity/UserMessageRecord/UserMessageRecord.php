@@ -105,6 +105,7 @@ class UserMessageRecord
         $this->chatId = $chatId;
         $this->userNickname = $userNickname;
         $this->userId = $userId;
+        $this->messageTime = $messageTime;
         $this->createdAt = $createdAt;
         $this->text = $text;
         $this->textLength = $textLength;
