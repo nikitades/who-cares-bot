@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
-use DateInterval;
 use DateTimeInterface;
 use LogicException;
 use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
@@ -63,7 +62,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             return;
         }
 
-        if ($peak->messagesCount < $historicalPeak->getPeak() / 2) {
+        if ($peak->messagesCount < $historicalPeak->getPeak() / 3) {
             $this->negativePeakAnalysisResponseGenerator->process(
                 $command->chatId,
                 NegativePeakAnalysisResponseGenerator::REASON_NO_PEAKS_DETECTED
@@ -122,7 +121,6 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
         }
 
         $targetMessage = $this->findFirstMessageNearTimestamp(
-            timestamp: $peakStart,
             messages: $recordsIncludingStartMessageRough
         );
 
@@ -193,7 +191,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
                     return $currentMessagesGroup->time;
                 }
 
-                return $lastMessagesGroup->time->sub(new DateInterval('PT1H'));
+                return $lastMessagesGroup->time;
             }
 
             $lastMessagesGroup = $currentMessagesGroup;
@@ -235,15 +233,22 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
     /**
      * @param array<UserMessageRecord> $messages
      */
-    private function findFirstMessageNearTimestamp(DateTimeInterface $timestamp, array $messages): ?UserMessageRecord
+    private function findFirstMessageNearTimestamp(array $messages): ?UserMessageRecord
     {
+        $earliestMessage = null;
+        //TODO: понять почему не обнаруживается сообщение, явно входящее в найденную по времени группу
         foreach (array_reverse($messages) as $message) {
-            if ($message->getCreatedAt() <= $timestamp) {
-                return $message;
+            if (null === $earliestMessage) {
+                $earliestMessage = $message;
+                continue;
+            }
+
+            if ($message->getCreatedAt() <= $earliestMessage->getCreatedAt()) {
+                $earliestMessage = $message;
             }
         }
 
-        return null;
+        return $earliestMessage;
     }
 
     /**
