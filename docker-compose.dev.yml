@@ -1,5 +1,10 @@
 version: "3"
 services:
+  app:
+    build:
+      context: ./webapi
+      dockerfile: docker/Dockerfile.base
+    image: nikitades/whocaresbot-app-base
   app_webapi:
     build:
       context: ./webapi
@@ -19,6 +24,7 @@ services:
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
     depends_on:
+      - app
       - app_maintenance
       - database
       - redis
@@ -41,6 +47,7 @@ services:
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
     depends_on:
+      - app
       - app_maintenance
       - database
       - redis
@@ -64,6 +71,7 @@ services:
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
     depends_on:
+      - app
       - app_maintenance
       - database
       - redis
@@ -86,6 +94,7 @@ services:
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
     depends_on:
+      - app
       - database
       - redis
   app_scheduler:
@@ -106,6 +115,7 @@ services:
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
     depends_on:
+      - app
       - database
       - redis
   nginx:
