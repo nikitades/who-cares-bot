@@ -83,6 +83,7 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
         return [] !== $this->createQueryBuilder('r')
             ->select('r.id')
             ->where('r.createdAt < :dateTo')->setParameter('dateTo', $this->getDateFrom($olderThanHours))
+            ->andWhere('r.chatId = :chatId')->setParameter('chatId', $chatId)
             ->setMaxResults(1)
             ->getQuery()
             ->getScalarResult();
@@ -133,8 +134,8 @@ class DoctrineUserMessageRecordRepository extends ServiceEntityRepository implem
         $this->getEntityManager()->flush();
     }
 
-    private function getDateFrom(int $withinHours): DateTimeInterface
+    private function getDateFrom(int $withinHours): string
     {
-        return (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)));
+        return (new DateTime('now'))->sub(new DateInterval(sprintf('PT%sH', $withinHours)))->format('Y-m-d H:i:s');
     }
 }
