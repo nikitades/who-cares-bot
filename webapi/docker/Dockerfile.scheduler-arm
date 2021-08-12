@@ -1,4 +1,4 @@
-FROM php:8-cli-alpine
+FROM arm64v8/php:8-cli-alpine
 
 RUN apk add postgresql-dev autoconf gcc g++ make libffi-dev openssl-dev
 RUN docker-php-ext-install pdo pdo_pgsql

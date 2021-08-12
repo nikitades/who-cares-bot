@@ -1,0 +1,3 @@
+FROM nikitades/whocaresbot-app-base:arm-latest
+
+CMD ["php-fpm"]

@@ -8,7 +8,7 @@ services:
   app_webapi:
     build:
       context: ./webapi
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.app
     image: nikitades/whocaresbot-app-webapi
     environment:
       APP_ENV: local

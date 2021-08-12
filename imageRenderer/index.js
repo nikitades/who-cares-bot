@@ -14,6 +14,7 @@ const requestListener = async function (req, res) {
             args: ['--no-sandbox']
         }
     });
+    console.log('request ' + appAddress + req.url + ' processed, sending to client');
     writeImageToClient(res);
 }
 
