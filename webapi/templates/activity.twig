@@ -20,7 +20,15 @@
         const labels = {{ labels|json_encode|raw }};
         const data = {{ data|json_encode|raw }};
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+    <script>
+        Function.prototype.bind = Function.prototype.bind || function (thisp) {
+            var fn = this;
+            return function () {
+              return fn.apply(thisp, arguments);
+            };
+          };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
