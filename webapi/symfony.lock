@@ -148,6 +148,15 @@
     "longman/telegram-bot": {
         "version": "0.72.0"
     },
+    "mikehaertl/php-shellcommand": {
+        "version": "1.6.4"
+    },
+    "mikehaertl/php-tmpfile": {
+        "version": "1.2.1"
+    },
+    "mikehaertl/phpwkhtmltopdf": {
+        "version": "2.5.0"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },

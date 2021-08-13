@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateActivityReport;
 
-use DateInterval;
-use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponse;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponseGenerator;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
-use Safe\DateTime;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
-use function Safe\ksort;
+use mikehaertl\wkhtmlto\Image;
 use function Safe\sprintf;
+use function Safe\ksort;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Safe\DateTime;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequest;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponseGenerator;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponse;
+use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
+use DateInterval;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequestRepositoryInterface;
+use Twig\Environment;
 
 class GenerateActivityReportCommandHandler implements CommandHandlerInterface
 {
@@ -25,6 +29,8 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
         private RenderedPageProviderInterface $renderedPageProvider,
         private CacheInterface $cache,
         private ActivityResponseGenerator $activityResponseGenerator,
+        private RenderRequestRepositoryInterface $renderRequestRepository,
+        private Environment $twigEnvironment,
         private int $cachePeriod
     ) {
     }
@@ -43,34 +49,35 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
                     0,
                     UserMessageRecordRepositoryInterface::BY_HOUR
                 );
-
+        
                 $firstTimestamp = DateTime::createFromFormat(self::DATE_ROUNDED_TO_HOURS_KEY, (new DateTime('now'))->sub(new DateInterval('P1D'))->format(self::DATE_ROUNDED_TO_HOURS_KEY));
                 $lastTimestamp = DateTime::createFromFormat(self::DATE_ROUNDED_TO_HOURS_KEY, (new DateTime('now'))->format(self::DATE_ROUNDED_TO_HOURS_KEY));
-
+        
                 $realChronologicPositionsMap = [];
                 for ($i = $firstTimestamp; $i < $lastTimestamp; $i->add(new DateInterval('PT1H'))) {
                     $realChronologicPositionsMap[$i->format(self::DATE_ROUNDED_TO_HOURS_KEY)] = 0;
                 }
-
+        
                 foreach ($lastMessages as $messagesAtTimeRecord) {
                     $realChronologicPositionsMap[$messagesAtTimeRecord->time->format(self::DATE_ROUNDED_TO_HOURS_KEY)] = $messagesAtTimeRecord->messagesCount;
                 }
-
+        
                 ksort($realChronologicPositionsMap);
-
+        
                 $labels = array_map(
                     fn (string $stringDateRecord): string => DateTime::createFromFormat(self::DATE_ROUNDED_TO_HOURS_KEY, $stringDateRecord)->format('H:00'),
                     array_keys($realChronologicPositionsMap)
                 );
                 $positions = array_values($realChronologicPositionsMap);
-
+        
+                $image = new Image(
+                    $this->twigEnvironment->render('activity.chartcss.twig', ['labels' => $labels, 'data' => $positions])
+                );
+        
                 return new ActivityResponse(
                     chatId: $command->chatId,
                     peakValue: array_reduce($positions, fn (int $carry, int $count) => $carry = $count > $carry ? $count : $carry, 0),
-                    imageContent: $this->renderedPageProvider->getActivityImage(
-                        labels: $labels,
-                        positions: $positions
-                    )
+                    imageContent: $image->toString()
                 );
             }
         );

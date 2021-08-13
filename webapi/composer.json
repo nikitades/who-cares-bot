@@ -15,6 +15,7 @@
         "doctrine/orm": "^2.8",
         "guzzlehttp/guzzle": "^7.3",
         "longman/telegram-bot": "^0.72.0",
+        "mikehaertl/phpwkhtmltopdf": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.2",
         "symfony/cache": "5.2.*",
         "symfony/console": "5.2.*",
