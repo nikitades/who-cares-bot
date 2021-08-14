@@ -11,28 +11,26 @@ builx_install:
 	docker run --privileged --rm tonistiigi/binfmt --install all
 
 composer:
-	(cd webapi && composer install)
-	(cd webapi && bin/console cache:warmup)
+	composer install
+	bin/console cache:warmup
 
 build_amd64:
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-base:latest -f docker/Dockerfile.base --push .
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-webapi:latest -f docker/Dockerfile.app --push .
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-consumer:latest -f docker/Dockerfile.consumer.regular --push .
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-consumer-slow:latest -f docker/Dockerfile.consumer.slow --push .
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-maintenance:latest -f docker/Dockerfile.maintenance --push .
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-scheduler:latest -f docker/Dockerfile.scheduler --push .
-	cd webapi && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-nginx:latest -f docker/Dockerfile.nginx --push .
-	cd imageRenderer && docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-imagerenderer:latest -f Dockerfile --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-base:latest -f docker/Dockerfile.base --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-webapi:latest -f docker/Dockerfile.app --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-consumer:latest -f docker/Dockerfile.consumer.regular --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-consumer-slow:latest -f docker/Dockerfile.consumer.slow --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-maintenance:latest -f docker/Dockerfile.maintenance --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-app-scheduler:latest -f docker/Dockerfile.scheduler --push .
+	docker buildx build --platform linux/amd64 -t nikitades/whocaresbot-nginx:latest -f docker/Dockerfile.nginx --push .
 
 build_arm64:
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-base:arm-latest -f docker/Dockerfile.base-arm --push .
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-webapi:arm-latest -f docker/Dockerfile.app-arm --push .
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-consumer:arm-latest -f docker/Dockerfile.consumer.regular-arm --push .
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-consumer-slow:arm-latest -f docker/Dockerfile.consumer.slow-arm --push .
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-maintenance:arm-latest -f docker/Dockerfile.maintenance-arm --push .
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-scheduler:arm-latest -f docker/Dockerfile.scheduler-arm --push .
-	cd webapi && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-nginx:arm-latest -f docker/Dockerfile.nginx-arm --push .
-	cd imageRenderer && docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-imagerenderer:arm-latest -f Dockerfile-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-base:arm-latest -f docker/Dockerfile.base-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-webapi:arm-latest -f docker/Dockerfile.app-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-consumer:arm-latest -f docker/Dockerfile.consumer.regular-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-consumer-slow:arm-latest -f docker/Dockerfile.consumer.slow-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-maintenance:arm-latest -f docker/Dockerfile.maintenance-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-app-scheduler:arm-latest -f docker/Dockerfile.scheduler-arm --push .
+	docker buildx build --platform linux/arm64 -t nikitades/whocaresbot-nginx:arm-latest -f docker/Dockerfile.nginx-arm --push .
 
 down:
 	docker-compose -f docker-compose.dev.yml down

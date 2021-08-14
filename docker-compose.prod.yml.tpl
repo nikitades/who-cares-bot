@@ -101,7 +101,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./webapi/var/nginx/log:/var/log/nginx
+      - ./var/nginx/log:/var/log/nginx
     depends_on:
       - app_webapi
     restart: always
@@ -118,7 +118,7 @@ services:
       POSTGRES_USER: whocaresbot
       POSTGRES_PASSWORD: whocaresbot
     volumes:
-      - ./webapi/docker/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./docker/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
       - ./database/files:/var/lib/postgresql/data
   redis:
     image: redis:6-alpine

@@ -1,142 +1,131 @@
 version: "3"
 services:
-  app:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.base
-    image: nikitades/whocaresbot-app-base
   app_webapi:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.app
     image: nikitades/whocaresbot-app-webapi
+    restart: always
+    user: "1000"
     environment:
-      APP_ENV: local
-      REDIS_DSN: redis://redis:6379
+      APP_ENV: prod
       DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
-      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
-      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
-      BOT_NAME: whocaresbot
-      CACHE_PERIOD: 5
+      REDIS_DSN: redis://redis:6379
+      APP_SECRET: Hk8T66u9ArymEqAmSGzAYB282pCnm0vH
+      BOT_TOKEN: 1710037140:AAFydudX1WsxFizF255pVvcjaaJTvCF-eWk
+      BOT_NAME: chatanalyticsbot
+      CACHE_PERIOD: 300
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
-    restart: always
+    volumes:
+      - ./logs/app:/app/var/log:z
     depends_on:
-      - app
       - app_maintenance
       - database
       - redis
   app_consumer_regular:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.consumer.regular
     image: nikitades/whocaresbot-app-consumer
+    restart: always
+    user: "1000"
+    deploy:
+      replicas: 2
     environment:
-      APP_ENV: local
-      REDIS_DSN: redis://redis:6379
+      APP_ENV: prod
       DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
-      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
-      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
-      BOT_NAME: whocaresbot
-      CACHE_PERIOD: 5
+      REDIS_DSN: redis://redis:6379
+      APP_SECRET: Hk8T66u9ArymEqAmSGzAYB282pCnm0vH
+      BOT_TOKEN: 1710037140:AAFydudX1WsxFizF255pVvcjaaJTvCF-eWk
+      BOT_NAME: chatanalyticsbot
+      CACHE_PERIOD: 300
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
-    restart: always
+    volumes:
+      - ./logs/app:/app/var/log:z
     depends_on:
-      - app
       - app_maintenance
       - database
       - redis
-    command: ["bin/console", "messenger:consume", "async", "-vv"]
   app_consumer_slow:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.consumer.slow
     image: nikitades/whocaresbot-app-consumer-slow
-    environment:
-      APP_ENV: local
-      REDIS_DSN: redis://redis:6379
-      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
-      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
-      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
-      BOT_NAME: whocaresbot
-      CACHE_PERIOD: 5
-      PEAK_SEARCH_PERIOD: 720
-      MESSENGER_TRANSPORT_DSN: doctrine://default
-      LOCK_DSN: flock
-      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     restart: always
-    depends_on:
-      - app
-      - app_maintenance
-      - database
-      - redis
-    command: ["bin/console", "messenger:consume", "async_slow", "-vv"]
-  app_maintenance:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.maintenance
-    image: nikitades/whocaresbot-app-maintenance
+    user: "1000"
     environment:
-      APP_ENV: local
-      REDIS_DSN: redis://redis:6379
+      APP_ENV: prod
       DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
-      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
-      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
-      BOT_NAME: whocaresbot
-      CACHE_PERIOD: 5
+      REDIS_DSN: redis://redis:6379
+      APP_SECRET: Hk8T66u9ArymEqAmSGzAYB282pCnm0vH
+      BOT_TOKEN: 1710037140:AAFydudX1WsxFizF255pVvcjaaJTvCF-eWk
+      BOT_NAME: chatanalyticsbot
+      CACHE_PERIOD: 300
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
+    volumes:
+      - ./logs/app:/app/var/log:z
     depends_on:
-      - app
+      - app_maintenance
       - database
       - redis
   app_scheduler:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.scheduler
     image: nikitades/whocaresbot-app-scheduler
+    restart: always
+    user: "1000"
     environment:
-      APP_ENV: local
-      REDIS_DSN: redis://redis:6379
+      APP_ENV: prod
       DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
-      APP_SECRET: 63ce6ac56e0818b83300bb344cf3728f
-      BOT_TOKEN: 1778873763:AAHiHJaXiIQl1sDc66ApI9kquCL7NNvEq_g
-      BOT_NAME: whocaresbot
-      CACHE_PERIOD: 5
+      REDIS_DSN: redis://redis:6379
+      APP_SECRET: Hk8T66u9ArymEqAmSGzAYB282pCnm0vH
+      BOT_TOKEN: 1710037140:AAFydudX1WsxFizF255pVvcjaaJTvCF-eWk
+      BOT_NAME: chatanalyticsbot
+      CACHE_PERIOD: 300
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
       IMAGE_RENDERER_ADDRESS: http://imagerenderer
+    volumes:
+      - ./logs/app:/app/var/log:z
     depends_on:
-      - app
+      - app_maintenance
+      - database
+      - redis
+  app_maintenance:
+    image: nikitades/whocaresbot-app-maintenance
+    user: "1000"
+    restart: "on-failure"
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: postgresql://whocaresbot:whocaresbot@database:5432/whocaresbot?serverVersion=13&charset=utf8
+      REDIS_DSN: redis://redis:6379
+      APP_SECRET: Hk8T66u9ArymEqAmSGzAYB282pCnm0vH
+      BOT_TOKEN: 1710037140:AAFydudX1WsxFizF255pVvcjaaJTvCF-eWk
+      BOT_NAME: chatanalyticsbot
+      CACHE_PERIOD: 300
+      PEAK_SEARCH_PERIOD: 720
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      LOCK_DSN: flock
+      IMAGE_RENDERER_ADDRESS: http://imagerenderer
+    volumes:
+      - ./logs/app:/app/var/log:z
+    depends_on:
       - database
       - redis
   nginx:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.nginx
     image: nikitades/whocaresbot-nginx
     ports:
-      - 8080:80
+      - 8087:80
     volumes:
-      - ./var/nginx/log:/var/log/nginx
+      - ./logs/nginx:/var/log/nginx
     depends_on:
       - app_webapi
     restart: always
   imagerenderer:
-    build:
-      context: ./imageRenderer
     image: nikitades/whocaresbot-imagerenderer
     restart: always
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
+      MAIN_APP_ADDRESS: http://nginx
   database:
     image: postgres:13-alpine
     restart: always
@@ -145,8 +134,9 @@ services:
       POSTGRES_PASSWORD: whocaresbot
     volumes:
       - ./docker/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./database/files:/var/lib/postgresql/data
     ports:
-      - 5433:5432
+      - 5434:5432
   redis:
     image: redis:6-alpine
     volumes:
