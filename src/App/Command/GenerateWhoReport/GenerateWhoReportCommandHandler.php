@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GenerateWhoReport;
 
-use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Who\WhoCommandResponse;
-use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Who\WhoCommandResponseGenerator;
-use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserPosition;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
+use mikehaertl\wkhtmlto\Image;
 use function Safe\sprintf;
+use Twig\Environment;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserPosition;
+use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
+use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Who\WhoCommandResponseGenerator;
+use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Who\WhoCommandResponse;
+use RuntimeException;
 
 class GenerateWhoReportCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
-        private RenderedPageProviderInterface $renderedPageProvider,
         private CacheInterface $cache,
         private WhoCommandResponseGenerator $whoCommandResponseGenerator,
+        private Environment $twigEnvironment,
         private int $cachePeriod
     ) {
     }
@@ -40,19 +42,40 @@ class GenerateWhoReportCommandHandler implements CommandHandlerInterface
                     topUsersCount: $topUsersCount
                 );
 
+                $image = new Image(
+                    $this->twigEnvironment->render(
+                        'top.twig',
+                        [
+                            'labels' => array_map(
+                                fn (UserPosition $position): string => sprintf('%s: %s', $position->userNickname, $position->userMessagesCount),
+                                $positions
+                            ),
+                            'data' => array_map(
+                                fn (UserPosition $position): int => $position->userMessagesCount,
+                                $positions
+                            ),
+                        ]
+                    )
+                );
+                $image->setOptions([
+                    'width' => 800,
+                    'height' => 680,
+                    'zoom' => 2,
+                    'format' => 'png',
+                    'javascript-delay' => 50,
+                    'no-stop-slow-scripts',
+                ]);
+
+                $imageContent = $image->toString();
+
+                if (is_bool($imageContent)) {
+                    throw new RuntimeException('Failed to create the image!');
+                }
+
                 return new WhoCommandResponse(
                     $positions,
                     $command->chatId,
-                    $this->renderedPageProvider->getRegularTopImage(
-                        array_map(
-                            fn (UserPosition $position): string => sprintf('%s: %s', $position->userNickname, $position->userMessagesCount),
-                            $positions
-                        ),
-                        array_map(
-                            fn (UserPosition $position): int => $position->userMessagesCount,
-                            $positions
-                        )
-                    )
+                    $imageContent
                 );
             }
         );

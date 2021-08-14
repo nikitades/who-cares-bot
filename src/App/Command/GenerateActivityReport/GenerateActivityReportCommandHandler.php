@@ -11,13 +11,11 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Safe\DateTime;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequest;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponseGenerator;
 use Nikitades\WhoCaresBot\WebApi\App\TelegramCommand\ResponseGenerator\Activity\ActivityResponse;
-use Nikitades\WhoCaresBot\WebApi\App\RenderedPageProviderInterface;
 use DateInterval;
-use Nikitades\WhoCaresBot\WebApi\Domain\Entity\RenderRequest\RenderRequestRepositoryInterface;
+use RuntimeException;
 use Twig\Environment;
 
 class GenerateActivityReportCommandHandler implements CommandHandlerInterface
@@ -26,10 +24,8 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
 
     public function __construct(
         private UserMessageRecordRepositoryInterface $userMessageRecordRepository,
-        private RenderedPageProviderInterface $renderedPageProvider,
         private CacheInterface $cache,
         private ActivityResponseGenerator $activityResponseGenerator,
-        private RenderRequestRepositoryInterface $renderRequestRepository,
         private Environment $twigEnvironment,
         private int $cachePeriod
     ) {
@@ -49,27 +45,27 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
                     0,
                     UserMessageRecordRepositoryInterface::BY_HOUR
                 );
-        
+
                 $firstTimestamp = DateTime::createFromFormat(self::DATE_ROUNDED_TO_HOURS_KEY, (new DateTime('now'))->sub(new DateInterval('P1D'))->format(self::DATE_ROUNDED_TO_HOURS_KEY));
                 $lastTimestamp = DateTime::createFromFormat(self::DATE_ROUNDED_TO_HOURS_KEY, (new DateTime('now'))->format(self::DATE_ROUNDED_TO_HOURS_KEY));
-        
+
                 $realChronologicPositionsMap = [];
                 for ($i = $firstTimestamp; $i < $lastTimestamp; $i->add(new DateInterval('PT1H'))) {
                     $realChronologicPositionsMap[$i->format(self::DATE_ROUNDED_TO_HOURS_KEY)] = 0;
                 }
-        
+
                 foreach ($lastMessages as $messagesAtTimeRecord) {
                     $realChronologicPositionsMap[$messagesAtTimeRecord->time->format(self::DATE_ROUNDED_TO_HOURS_KEY)] = $messagesAtTimeRecord->messagesCount;
                 }
-        
+
                 ksort($realChronologicPositionsMap);
-        
+
                 $labels = array_map(
                     fn (string $stringDateRecord): string => DateTime::createFromFormat(self::DATE_ROUNDED_TO_HOURS_KEY, $stringDateRecord)->format('H:00'),
                     array_keys($realChronologicPositionsMap)
                 );
                 $positions = array_values($realChronologicPositionsMap);
-        
+
                 $image = new Image(
                     $this->twigEnvironment->render('activity.twig', ['labels' => $labels, 'data' => $positions])
                 );
@@ -79,13 +75,19 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
                     'zoom' => 2,
                     'format' => 'png',
                     'javascript-delay' => 50,
-                    'no-stop-slow-scripts'
+                    'no-stop-slow-scripts',
                 ]);
-        
+
+                $imageContent = $image->toString();
+
+                if (is_bool($imageContent)) {
+                    throw new RuntimeException('Failed to create the image!');
+                }
+
                 return new ActivityResponse(
                     chatId: $command->chatId,
                     peakValue: array_reduce($positions, fn (int $carry, int $count) => $carry = $count > $carry ? $count : $carry, 0),
-                    imageContent: $image->toString()
+                    imageContent: $imageContent
                 );
             }
         );

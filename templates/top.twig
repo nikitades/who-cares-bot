@@ -3,7 +3,12 @@
 
 <head>
     <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     <style>
+        .reportGraph {
+            width: 900px
+        }
+
         html,
         body {
             padding: 0;
@@ -13,54 +18,84 @@
 </head>
 
 <body>
-    <div class="chart-container">
-        <canvas id="myChart"></canvas>
-    </div>
+
+    <div class="reportGraph"><canvas id="canvas"></canvas></div>
+
     <script>
-        const labels = {{ labels|json_encode|raw }};
-        const data = {{ data|json_encode|raw }};
+        var labels = {{ labels| json_encode | raw }};
+        var data = {{ data| json_encode | raw }};
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'The most active persons',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+
+    <script type="text/javascript">
+        // wkhtmltopdf 0.12.5 crash fix.
+        // https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3242#issuecomment-518099192
+        'use strict';
+        (function (setLineDash) {
+            CanvasRenderingContext2D.prototype.setLineDash = function () {
+                if (!arguments[0].length) {
+                    arguments[0] = [1, 0];
+                }
+                // Now, call the original method
+                return setLineDash.apply(this, arguments);
+            };
+        })(CanvasRenderingContext2D.prototype.setLineDash);
+        Function.prototype.bind = Function.prototype.bind || function (thisp) {
+            var fn = this;
+            return function () {
+                return fn.apply(thisp, arguments);
+            };
+        };
+
+        function drawGraphs() {
+            new Chart(
+                document.getElementById("canvas"), {
+                "responsive": false,
+                "type": "bar",
+                "data": {
+                    "labels": labels,
+                    "datasets": [{
+                        "label": "The most active people",
+                        "data": data,
+                        "fill": true,
+                        "backgroundColor": [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        "borderColor": [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        "lineTension": 0.3,
+                        "borderWidth": 1
+                    }]
                 },
-                maintainAspectRatio: true,
-                responsive: true,
-                aspectRatio: 4/3
+                "options": {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    maintainAspectRatio: true,
+                    responsive: true,
+                    aspectRatio: 4 / 3,
+                    animation: {
+                        duration: 0
+                    },
+                }
             }
-        });
+            );
+        }
+        window.onload = function () {
+            drawGraphs();
+        };
     </script>
 </body>
 

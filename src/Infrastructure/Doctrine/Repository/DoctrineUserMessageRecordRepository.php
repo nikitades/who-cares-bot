@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nikitades\WhoCaresBot\WebApi\Infrastructure\Doctrine\Repository;
 
 use DateInterval;
-use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;

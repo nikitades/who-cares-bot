@@ -5,7 +5,6 @@ declare(strict_types=1);
 use GuzzleHttp\Client;
 use Nikitades\WhoCaresBot\WebApi\Domain\Command\CommandHandlerInterface;
 
-use Nikitades\WhoCaresBot\WebApi\Infrastructure\Local\LocalRenderedPageProvider;
 use Nikitades\WhoCaresBot\WebApi\Infrastructure\Telegram\BusAwareTelegram;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -49,7 +48,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$config', [
             'base_uri' => '%env(IMAGE_RENDERER_ADDRESS)%',
         ]);
-
-    $services->set(LocalRenderedPageProvider::class)
-        ->arg(Client::class, service('local.node.httpClient'));
 };

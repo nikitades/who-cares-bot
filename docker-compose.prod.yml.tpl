@@ -14,7 +14,6 @@ services:
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
-      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     volumes:
       - ./logs:/app/var/log
     depends_on:
@@ -35,7 +34,6 @@ services:
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
-      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     volumes:
       - ./logs:/app/var/log
     depends_on:
@@ -56,7 +54,6 @@ services:
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
-      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     volumes:
       - ./logs:/app/var/log
     depends_on:
@@ -76,7 +73,6 @@ services:
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
-      IMAGE_RENDERER_ADDRESS: http://imagerenderer
   app_scheduler:
     image: nikitades/whocaresbot-app-scheduler
     environment:
@@ -90,7 +86,6 @@ services:
       PEAK_SEARCH_PERIOD: 720
       MESSENGER_TRANSPORT_DSN: doctrine://default
       LOCK_DSN: flock
-      IMAGE_RENDERER_ADDRESS: http://imagerenderer
     volumes:
       - ./logs/cron/cron.log:/var/log/cron.log
     depends_on:
@@ -105,12 +100,6 @@ services:
     depends_on:
       - app_webapi
     restart: always
-  imagerenderer:
-    image: nikitades/whocaresbot-imagerenderer
-    restart: always
-    environment:
-      NODE_ENV: production
-      MAIN_APP_ADDRESS: http://nginx
   database:
     image: postgres:13-alpine
     restart: always
