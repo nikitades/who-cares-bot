@@ -71,8 +71,16 @@ class GenerateActivityReportCommandHandler implements CommandHandlerInterface
                 $positions = array_values($realChronologicPositionsMap);
         
                 $image = new Image(
-                    $this->twigEnvironment->render('activity.chartcss.twig', ['labels' => $labels, 'data' => $positions])
+                    $this->twigEnvironment->render('activity.twig', ['labels' => $labels, 'data' => $positions])
                 );
+                $image->setOptions([
+                    'width' => 800,
+                    'height' => 680,
+                    'zoom' => 2,
+                    'format' => 'png',
+                    'javascript-delay' => 50,
+                    'no-stop-slow-scripts'
+                ]);
         
                 return new ActivityResponse(
                     chatId: $command->chatId,
