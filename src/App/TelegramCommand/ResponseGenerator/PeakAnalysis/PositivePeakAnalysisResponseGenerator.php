@@ -25,8 +25,24 @@ class PositivePeakAnalysisResponseGenerator implements ResponseGeneratorInterfac
         float $averageFrequencyPerMinute,
         float $peakFrequencyPerMinute,
         string $mostActivePersonName,
-        string $imageContent
+        ?string $imageContent
     ): void {
+        if (null === $imageContent) {
+            Request::sendMessage([
+                'chat_id' => $chatId,
+                'reply_to_message_id' => $initialMessageId,
+                'text' => $this->getText(
+                    $timeLength,
+                    $averageFrequencyPerMinute,
+                    $peakFrequencyPerMinute,
+                    $mostActivePersonName,
+                    $messagesCount
+                ),
+            ]);
+
+            return;
+        }
+
         Request::sendPhoto([
             'chat_id' => $chatId,
             'reply_to_message_id' => $initialMessageId,

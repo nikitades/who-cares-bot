@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Nikitades\WhoCaresBot\WebApi\App\Command\GeneratePeakAnalysisReport;
 
-use mikehaertl\wkhtmlto\Image;
 use function Safe\sort;
 use function Safe\arsort;
 use Twig\Environment;
 use Safe\DateTime;
-use RuntimeException;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecordRepositoryInterface;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\UserMessageRecord;
 use Nikitades\WhoCaresBot\WebApi\Domain\Entity\UserMessageRecord\MessagesAtTimeCount;
@@ -130,33 +128,6 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             lastDate: $peakEnd
         );
 
-        $labels = [];
-        $positions = [];
-
-        $image = new Image(
-            $this->twigEnvironment->render(
-                'peakanalysis.twig',
-                [
-                    'labels' => $labels,
-                    'data' => $positions,
-                ]
-            )
-        );
-        $image->setOptions([
-            'width' => 800,
-            'height' => 680,
-            'zoom' => 2,
-            'format' => 'png',
-            'javascript-delay' => 50,
-            'no-stop-slow-scripts',
-        ]);
-
-        $imageContent = $image->toString();
-
-        if (is_bool($imageContent)) {
-            throw new RuntimeException('Failed to create the image!');
-        }
-
         $this->positivePeakAnalysisResponseGenerator->process(
             chatId: $command->chatId,
             initialMessageId: $targetMessage?->getMessageId() ?? 0,
@@ -165,7 +136,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
             averageFrequencyPerMinute: (float) (count($messagesWithinPeakOnly) / ($peakStart->diff($peakEnd)->h * 60 + $peakStart->diff($peakEnd)->m)),
             peakFrequencyPerMinute: $peak->messagesCount / 60,
             mostActivePersonName: $this->getMostActivePersonName($messagesWithinPeakOnly),
-            imageContent: $imageContent
+            imageContent: null
         );
     }
 
