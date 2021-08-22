@@ -102,6 +102,7 @@ class GeneratePeakAnalysisReportCommandHandler implements CommandHandlerInterfac
 
         $hoursIntervalToPeakStart = (new DateTime('now'))->diff($peakStart)->d * 24 + (new DateTime('now'))->diff($peakStart)->h + 1;
         $hoursIntervalToPeakEnd = (new DateTime('now'))->diff($peakEnd)->d * 24 + (new DateTime('now'))->diff($peakEnd)->h - 1;
+        $hoursIntervalToPeakEnd = $hoursIntervalToPeakEnd < 0 ? 0 : $hoursIntervalToPeakEnd;
 
         $recordsIncludingStartMessageRough = $this->userMessageRecordRepository->getAllRecordsWithinHours(
             chatId: $command->chatId,
