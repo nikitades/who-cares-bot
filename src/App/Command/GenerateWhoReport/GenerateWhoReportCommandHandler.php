@@ -60,7 +60,7 @@ class GenerateWhoReportCommandHandler implements CommandHandlerInterface
                 $image->setOptions([
                     'width' => 800,
                     'height' => 680,
-                    'zoom' => 2,
+                    'zoom' => 1,
                     'format' => 'png',
                     'javascript-delay' => 50,
                     'no-stop-slow-scripts',

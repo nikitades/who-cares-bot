@@ -1,4 +1,5 @@
 .vscode
+docker-compose.prod.yml
 
 ###> symfony/framework-bundle ###
 /.env.local

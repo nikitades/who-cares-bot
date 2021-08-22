@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'anonymous_api' => [
                 'policy' => 'fixed_window',
                 'limit' => 1,
-                'interval' => '5 minutes',
+                'interval' => '15 minutes',
             ],
         ],
     ]);
