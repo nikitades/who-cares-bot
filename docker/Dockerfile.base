@@ -4,6 +4,16 @@ RUN apk add postgresql-dev autoconf gcc g++ make libffi-dev openssl-dev shadow
 RUN docker-php-ext-install pdo pdo_pgsql pgsql
 RUN pecl install -o -f redis &&  rm -rf /tmp/pear &&  docker-php-ext-enable redis
 
+RUN apk add --update --no-cache \
+    libgcc libstdc++ libx11 glib libxrender libxext libintl \
+    ttf-dejavu ttf-droid ttf-freefont ttf-liberation
+
+COPY --from=madnight/alpine-wkhtmltopdf-builder:0.12.5-alpine3.10-606718795 \
+    /bin/wkhtmltopdf /bin/wkhtmltopdf
+
+COPY --from=madnight/alpine-wkhtmltopdf-builder:0.12.5-alpine3.10-606718795 \
+    /bin/wkhtmltoimage /bin/wkhtmltoimage
+
 RUN useradd chat-analytics-bot
 
 COPY . /app

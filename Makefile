@@ -5,7 +5,7 @@
 
 SERVICES_LIST = app_webapi app_consumer_regular app_consumer_slow app_maintenance app_scheduler nginx database redis
 
-build: builx_install composer build_amd64 build_arm64 prune
+build: builx_install composer build_amd64 build_arm64
 
 builx_install:
 	docker run --privileged --rm tonistiigi/binfmt --install all

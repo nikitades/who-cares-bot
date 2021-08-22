@@ -1,8 +1,8 @@
-FROM arm64v8/php:8-cli-alpine
+FROM nikitades/whocaresbot-app-base:arm-latest
 
-RUN apk add postgresql-dev autoconf gcc g++ make libffi-dev openssl-dev
-RUN docker-php-ext-install pdo pdo_pgsql
-RUN pecl install -o -f redis &&  rm -rf /tmp/pear &&  docker-php-ext-enable redis
+USER root
+
+RUN apt update & apt install cron -y
 
 COPY . /app
 COPY docker/crontab /etc/cron.d/crontab
@@ -10,7 +10,11 @@ COPY docker/crontab /etc/cron.d/crontab
 WORKDIR /app
 
 RUN chmod 0644 /etc/cron.d/crontab \
-    && crontab /etc/cron.d/crontab \
-    && touch /var/log/cron.log
+    && crontab -u chat-analytics-bot /etc/cron.d/crontab \
+    && touch /var/log/cron.log \
+    && touch /var/run/crond.pid \
+    && chmod 777 /var/run/crond.pid
 
-CMD ["crond", "-f"]
+USER chat-analytics-bot
+
+CMD ["cron", "-f"]

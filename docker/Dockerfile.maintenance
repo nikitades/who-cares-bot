@@ -1,4 +1,4 @@
-FROM nikitades/whocaresbot-app-base
+FROM nikitades/whocaresbot-app-base:latest
 
 RUN chmod +x /app/docker/entrypoint_migrations.sh
 
