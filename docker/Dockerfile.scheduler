@@ -2,6 +2,8 @@ FROM nikitades/whocaresbot-app-base:latest
 
 USER root
 
+RUN mkdir /home/chat-analytics-bot
+
 COPY docker/crontab /etc/cron.d/crontab
 
 RUN chmod 0644 /etc/cron.d/crontab \

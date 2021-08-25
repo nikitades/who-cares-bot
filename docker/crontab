@@ -1,3 +1,4 @@
+*/15 * * * * date
 */15 * * * * echo "Launching calculatePeak command..."
-*/15 * * * * /app/bin/console bot:cron:calculatePeak
+*/15 * * * * su - chat-analytics-bot -c '/app/bin/console bot:cron:calculatePeak'
 */1 * * * * echo "Ping"
